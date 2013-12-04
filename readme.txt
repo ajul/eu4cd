@@ -48,16 +48,16 @@ The average vanilla national idea group has a cost of 10; the highest cost in va
 
 === Penalties ===
 
-You may also get yellow and red flags for various reasons, including (but not limited to):
+You may also get yellow and red cards for various reasons, including (but not limited to):
 
 * Having a high national idea cost.
 * Upgrading technology group.
 * Starting with extra Mercantilism.
 
-Yellow flags represent bending the rules in minor ways, whereas red flags are more major offenses.
+Yellow cards represent bending the rules in minor ways, whereas red cards are more major offenses.
 
 === Balance ===
 
-Zero flags can be considered a "average" nation; one yellow flag can be considered "fair" relative to vanilla. A red flag or more than one yellow flag is well beyond vanilla.
+Zero cards can be considered a "average" nation; one yellow card can be considered "fair" relative to vanilla. A red card or more than one yellow card is well beyond vanilla.
 
 How balanced is this? Not very. The costs and penalties are set more to resemble vanilla costs and less to enforce balance.

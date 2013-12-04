@@ -9,12 +9,12 @@ bonusData = (
     ("advisor_pool",                1, (1, 2)),
     ("army_tradition",              1.0, (0.25, 1.0)),
     ("army_tradition_decay",        -0.01, (-0.005, -0.01)),
-    ("artillery_cost",              -0.1, (-0.05, -0.2)),
+    ("artillery_cost",              -0.2, (-0.05, -0.2)),
     ("artillery_power",             0.1, (0.05, 0.2)),
     ("auto_explore_adjacent_to_colony", 2.0, (True, True)), # bool), cost 1/2
     ("blockade_efficiency",         0.33, (0.33, 0.33)), #?
-    ("build_cost",                  -0.2, (-0.1, -0.33)), #-0.1 to -0.2?
-    ("cavalry_cost",                -0.1, (-0.05, -0.2)),
+    ("build_cost",                  -0.2, (-0.05, -0.33)), #-0.1 to -0.2?
+    ("cavalry_cost",                -0.2, (-0.05, -0.2)),
     ("cavalry_power",               0.1, (0.05, 0.25)),
     ("cb_on_government_enemies",    1.0, (True, True)), # bool
     ("cb_on_overseas",              1.0, (True, True)), # bool
@@ -50,7 +50,7 @@ bonusData = (
     ("global_ship_cost",            -0.1, (-0.05, -0.1)),
     ("global_ship_recruit_speed",   -0.1, (-0.05, -0.1)),
     ("global_spy_defence",          0.25, (0.05, 0.1)),
-    ("global_tariffs",              0.1, (0.05, 0.1)), # Spain only
+    ("global_tariffs",              0.2, (0.05, 0.2)), # Spain only
     ("global_tax_modifier",         0.1, (0.05, 0.2)),
     ("global_trade_income_modifier", 0.1, (0.05, 0.2)),
     ("global_trade_power",          0.1, (0.05, 0.2)),
@@ -129,6 +129,15 @@ bonusData = (
     ("war_exhaustion",              -0.02, (-0.01, -0.05)), # Innovative only
     ("war_exhaustion_cost",         -0.2, (-0.1, -0.33)), # -0.1 to -0.2?
     )
+
+redCardForDuplicates = set([
+    "army_tradition_decay",
+    "land_maintenance_modifier",
+    "merc_maintenance_modifier",
+    "naval_maintenance_modifier",
+    "navy_tradition_decay",
+    "prestige_decay",
+    ])
 
 bonusTypes, bonusNormalValue, bonusRange = zip(*bonusData)
 

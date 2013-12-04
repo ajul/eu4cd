@@ -19,12 +19,14 @@ religions = []
 governments = []
 
 ideas = []
+ideaSelects = []
 ideaTrees = []
 
 def readGameData(gamePath):
     global tags, tagFiles, tagNames, tagSelects, tagAdjectives
     global technologyGroups, technologyPowers
-    global religions, governments, ideas, ideaTrees
+    global religions, governments
+    global ideas, ideaSelects, ideaTrees
 
     pyradox.config.basedirs['EU4'] = gamePath
     pyradox.config.defaultGame = 'EU4'
@@ -78,13 +80,17 @@ def readGameData(gamePath):
     # ideas
     ideasData = pyradox.txt.parseMerge(os.path.join(gamePath, "common", "ideas"))
     ideas = []
+    ideaSelects = []
     ideaTrees = []
     for key, data in ideasData.items():
         if "free" not in data: continue # national ideas only
+        name = pyradox.yml.getLocalization(key, sources = ["text", "countries", "EU4", "powers_and_ideas"]) or ""
+        
         ideas.append(key)
+        ideaSelects.append("%s - %s" % (key, name))
         ideaTrees.append(data)
 
-    ideas, ideaTrees = zip(*sorted(zip(ideas, ideaTrees)))
+    ideas, ideaSelects, ideaTrees = zip(*sorted(zip(ideas, ideaSelects, ideaTrees)))
 
 class TagSelect(QComboBox):
     def __init__(self, parent=None):
@@ -139,4 +145,4 @@ class IdeasSelect(QComboBox):
 
     def reload(self):
         self.clear()
-        self.addItems(ideas)
+        self.addItems(ideaSelects)
