@@ -112,13 +112,14 @@ class OverviewWidget(QWidget):
     def getPenalties(self):
         yellowCards = []
         redCards = []
+        
         # tech group changed?
         technologyGroup = self.technologyGroupSelect.currentIndex()
         if technologyGroup < self.defaultTechnologyGroup:
             if technologyGroup != 0:
                 yellowCards.append("Upgraded technology group to non-Western.")
-            elif self.defaultTechnologyGroup <= 2:
-                yellowCards.append("Upgraded technology group from near-Western to Western.")
+            elif eu4cd.gamedata.technologyPowers[self.defaultTechnologyGroup] >= eu4cd.gamedata.technologyPowers[0]:
+                yellowCards.append("Upgraded technology group to Western from same power.")
             else:
-                redCards.append("Upgraded technology group from non-near-Western to Western.")
+                redCards.append("Upgraded technology group to Western from lower power.")
         return yellowCards, redCards

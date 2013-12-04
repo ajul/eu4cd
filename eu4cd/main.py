@@ -50,9 +50,7 @@ class MainWindow(QMainWindow):
 
     def createStatusBar(self):
         self.cost = QLabel()
-        self.cost.setText("Cost: 0.00")
         self.penalties = QLabel()
-        self.penalties.setText("%d yellow cards, %d red cards")
         self.statusBar().addPermanentWidget(self.cost)
         self.statusBar().addPermanentWidget(self.penalties)
 
@@ -60,6 +58,8 @@ class MainWindow(QMainWindow):
         eu4cd.gamedata.readGameData(self.gamePath)
         self.overview.reload()
         self.ideas.reload()
+        self.handleCostChanged(0.0)
+        self.handlePenaltiesChanged()
 
     def save(self):
         filepath, _ = QFileDialog.getSaveFileName(self, "Save file", "", "Mod file (*.mod)")
@@ -83,7 +83,7 @@ class MainWindow(QMainWindow):
         eu4cd.mod.writeMod(filepath, ideas=ideas, events=events, countries=countries, localization=localization)
 
     def handleCostChanged(self, cost):
-        self.cost.setText("Cost: %0.2f (%s)" % (cost, eu4cd.rating.getIdeaRating(cost)))
+        self.cost.setText("National ideas cost: %0.2f (%s)" % (cost, eu4cd.rating.getIdeaRating(cost)))
         self.rating.handleCostChanged(cost)
 
     def handlePenaltiesChanged(self):
@@ -93,7 +93,7 @@ class MainWindow(QMainWindow):
         yellow = yellowOverview + yellowIdeas
         red = redOverview + redIdeas
         
-        self.penalties.setText("%d yellow cards, %d red cards" % (len(yellow), len(red)))
+        self.penalties.setText("%d yellow card(s), %d red card(s)" % (len(yellow), len(red)))
         self.rating.handlePenaltiesChanged(yellow, red)
 
     def handleCountryLoaded(self):

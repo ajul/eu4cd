@@ -1,10 +1,16 @@
 import sys
 from cx_Freeze import setup, Executable
 
+include_files = (
+    "config.txt",
+    "eu4cd/txt/",
+    )
+
 build_exe_options = {
     'optimize' : 2,
     'compressed' : True,
     'create_shared_zip' : True,
+    'include_files' : include_files,
     }
 
 base = None

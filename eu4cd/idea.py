@@ -163,10 +163,8 @@ class IdeasTabWidget(QTabWidget):
 
     def getCost(self):
         cost = 0.0
-        cost += self.traditions.getCost()
-        for idea in self.ideas:
+        for idea in self.getAllIdeas():
             cost += idea.getCost()
-        cost += self.ambitions.getCost()
         return cost
 
     def getLocalization(self, tag, ideasInternalName):
@@ -190,7 +188,21 @@ class IdeasTabWidget(QTabWidget):
         elif cost > 10.0:
             yellowCards.append("National ideas exceed 10 points.")
 
+        # duplicate ideas
+        bonusTypes = []
+        for idea in self.getAllIdeas():
+            bonusTypes += list(idea.ideaBonuses.getBonusTypes())
+
+        for i, bonusType in enumerate(bonusTypes):
+            if bonusType in bonusTypes[i+1:]:
+                redCards.append("Duplicate bonus %s." % (bonusType,))
+
         return yellowCards, redCards
+
+    def getAllIdeas(self):
+        yield self.traditions
+        for idea in self.ideas: yield idea
+        yield self.ambitions
 
     def handleCostChanged(self):
         cost = self.getCost()
@@ -272,7 +284,7 @@ class IdeaText(QGroupBox):
         if bonusKey in ("start", "bonus"):
             self.name.setText(pyradox.yml.getLocalization(ideasInternalName + "_" + bonusKey, sources = ["text", "countries", "EU4", "powers_and_ideas"]) or "")
         else:
-            self.internalName.setText(bonusKey)
+            self.internalName.setText(bonusKey + "_custom")
             self.name.setText(pyradox.yml.getLocalization(bonusKey, sources = ["text", "countries", "EU4", "powers_and_ideas"]) or "")
             self.description.setText(pyradox.yml.getLocalization(bonusKey + "_desc", sources = ["text", "countries", "EU4", "powers_and_ideas"]) or "")
         
@@ -280,7 +292,7 @@ class IdeaText(QGroupBox):
 class IdeaBonuses(QGroupBox):
     costChanged = pyqtSignal()
 
-    nBonuses = 2
+    nBonuses = 3
     
     def __init__(self, parent=None):
         super().__init__("Bonuses", parent=parent)
@@ -308,21 +320,26 @@ class IdeaBonuses(QGroupBox):
         return tree
 
     def setTree(self, bonuses):
-        for i in range(self.nBonuses):
+        for i, bonus in enumerate(self.bonuses):
             if len(bonuses) > i:
                 bonusType, bonusValue = bonuses.at(i)
                 if bonusType not in eu4cd.ideaoptions.bonusTypes: continue
-                self.bonuses[i].bonusTypeSelect.setCurrentIndex(eu4cd.ideaoptions.bonusTypes.index(bonusType))
-                valueIndex = eu4cd.ideaoptions.getClosestValueIndex(self.bonuses[i].values, bonusValue)
-                self.bonuses[i].bonusValueSelect.setCurrentIndex(valueIndex)
+                bonus.bonusTypeSelect.setCurrentIndex(eu4cd.ideaoptions.bonusTypes.index(bonusType))
+                valueIndex = eu4cd.ideaoptions.getClosestValueIndex(bonus.values, bonusValue)
+                bonus.bonusValueSelect.setCurrentIndex(valueIndex)
             else:
-                self.bonuses[i].bonusTypeSelect.setCurrentIndex(0)
+                bonus.bonusTypeSelect.setCurrentIndex(0)
 
     def getCost(self):
         return sum(bonus.getCost() for bonus in self.bonuses)
 
     def handleCostChanged(self):
         self.costChanged.emit()
+
+    def getBonusTypes(self):
+        for bonus in self.bonuses:
+            if bonus.getIndex() > 0:
+                yield bonus.getType()
 
 class IdeaBonus(QWidget):
     costChanged = pyqtSignal()
@@ -351,6 +368,9 @@ class IdeaBonus(QWidget):
         self.bonusValueSelect.clear()
         self.bonusValueSelect.addItems(options)
         self.bonusValueSelect.setCurrentIndex(defaultIndex)
+
+    def getIndex(self):
+        return self.bonusTypeSelect.currentIndex()
 
     def getType(self):
         return eu4cd.ideaoptions.bonusTypes[self.bonusTypeSelect.currentIndex()]
