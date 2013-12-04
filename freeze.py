@@ -3,6 +3,7 @@ from cx_Freeze import setup, Executable
 
 include_files = (
     "eu4cd/txt/",
+    "libEGL.dll",
     )
 
 build_exe_options = {
@@ -17,7 +18,7 @@ if sys.platform == "win32":
     base = "Win32GUI"
 
 setup(name = "eu4cd",
-      version = "1.0",
+      version = "0.2",
       description = "My GUI application!",
       options = {"build_exe": build_exe_options},
       executables = [Executable("eu4cd.py", base=base)])
