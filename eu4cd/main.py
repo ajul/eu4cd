@@ -65,7 +65,7 @@ class MainWindow(QMainWindow):
                     self.gamePath = location
 
         if self.gamePath == "" or forceManualGamePath:
-            self.gamePath = QFileDialog.getExistingDirectory(caption = "Select Europa Universalis IV directory", dir = self.gamePath)
+            self.gamePath = QFileDialog.getExistingDirectory(caption = "Select Europa Universalis IV directory", directory = self.gamePath)
 
         if 'modpath' in config and os.path.exists(config['modpath']):
             self.modPath = config['modpath']
@@ -91,7 +91,7 @@ class MainWindow(QMainWindow):
 
     def createMenus(self):
         self.menuFile = self.menuBar().addMenu("&File")
-        self.menuFile.addAction(QAction("&Open", self, shortcut="Ctrl+O", statusTip="Open", triggered=lambda: None))
+        self.menuFile.addAction(QAction("&Open", self, shortcut="Ctrl+O", statusTip="Open", triggered=lambda: self.loadConfig(True)))
         self.menuFile.addAction(QAction("&Save", self, shortcut="Ctrl+S", statusTip="Save", triggered=self.save))
         self.menuFile.addAction(QAction("E&xit", self, shortcut="Ctrl+Q", statusTip="Exit the application", triggered=self.close))
 

@@ -94,15 +94,20 @@ class OverviewWidget(QWidget):
 
     def getTree(self):
         result = self.countryData.deepCopy()
-        # TODO: recursive
-        result["technology_group"] = eu4cd.gamedata.technologyGroups[self.technologyGroupSelect.currentIndex()]
-        result["religion"] = eu4cd.gamedata.religions[self.religionSelect.currentIndex()]
-        result["government"] = eu4cd.gamedata.governments[self.governmentSelect.currentIndex()]
+
+        result.deleteWalk("technology_group")
+        result.deleteWalk("religion")
+        result.deleteWalk("government")
+        result.deleteWalk("mercantilism")
+
+        result.insert(0, "technology_group", eu4cd.gamedata.technologyGroups[self.technologyGroupSelect.currentIndex()])
+        result.insert(0, "religion", eu4cd.gamedata.religions[self.religionSelect.currentIndex()])
+        result.insert(0, "government", eu4cd.gamedata.governments[self.governmentSelect.currentIndex()])
         
         if self.mercantilismSelect.currentIndex() == 0:
-            result["mercantilism"] = 10.0
+            result.insert(0, "mercantilism", 10.0)
         else:
-            result["mercantilism"] = 25.0
+            result.insert(0, "mercantilism", 25.0)
 
         return result
 
