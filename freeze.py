@@ -4,6 +4,8 @@ from cx_Freeze import setup, Executable
 include_files = (
     "eu4cd/txt/",
     "libEGL.dll",
+    "license.txt",
+    "readme.txt",
     )
 
 build_exe_options = {
