@@ -55,6 +55,7 @@ class OverviewWidget(QWidget):
 
         # signals
         self.tagSelect.currentIndexChanged.connect(self.loadCountry)
+        self.mercantilismSelect.currentIndexChanged.connect(self.handleMercantilismChanged)
         self.technologyGroupSelect.currentIndexChanged.connect(self.handleTechnologyGroupChanged)
 
     def reload(self):
@@ -127,4 +128,11 @@ class OverviewWidget(QWidget):
                 yellowCards.append("Upgraded technology group to Western from same power.")
             else:
                 redCards.append("Upgraded technology group to Western from lower power.")
+
+        # mercantilism
+        if self.mercantilismSelect.currentIndex() > 0:
+            yellowCards.append("Bonus mercantilism.")
         return yellowCards, redCards
+
+    def handleMercantilismChanged(self):
+        self.penaltiesChanged.emit()
