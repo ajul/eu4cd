@@ -99,8 +99,8 @@ class MainWindow(QMainWindow):
 
     def createMenus(self):
         self.menuFile = self.menuBar().addMenu("&File")
-        self.menuFile.addAction(QAction("L&oad", self, shortcut="Ctrl+O", statusTip="Load game data", triggered=lambda: self.loadConfig(optional=True)))
-        self.menuFile.addAction(QAction("&Save", self, shortcut="Ctrl+S", statusTip="Save mod", triggered=self.save))
+        self.menuFile.addAction(QAction("L&oad game data", self, shortcut="Ctrl+O", statusTip="Load game data", triggered=lambda: self.loadConfig(optional=True)))
+        self.menuFile.addAction(QAction("&Save mod", self, shortcut="Ctrl+S", statusTip="Save mod", triggered=self.save))
         self.menuFile.addAction(QAction("E&xit", self, shortcut="Ctrl+Q", statusTip="Exit the application", triggered=self.close))
 
     def createStatusBar(self):

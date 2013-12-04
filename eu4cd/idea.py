@@ -188,9 +188,14 @@ class IdeasTabWidget(QTabWidget):
         redCards = []
         cost = self.getCost()
         if cost > 15.0:
-            redCards.append("National ideas exceed 15 points.")
+            redCards.append("National ideas cost more than 15.0 points.")
         elif cost > 10.0:
-            yellowCards.append("National ideas exceed 10 points.")
+            yellowCards.append("National ideas cost more than 10.0 points.")
+
+        # empty ideas
+        for idea in self.getAllIdeas():
+            if idea.isEmpty():
+                redCards.append("Idea %s has no bonuses." % (idea.getName(),))
 
         # duplicate ideas
         bonusTypes = []
@@ -199,7 +204,7 @@ class IdeasTabWidget(QTabWidget):
 
         for i, bonusType in enumerate(bonusTypes):
             if bonusType in bonusTypes[i+1:]:
-                redCards.append("Duplicate bonus %s." % (bonusType,))
+                redCards.append("Duplicate idea bonus %s." % (bonusType,))
 
         return yellowCards, redCards
 
@@ -260,6 +265,9 @@ class Idea(QWidget):
 
     def handleCostChanged(self):
         self.costChanged.emit()
+
+    def isEmpty(self):
+        return not any(bonus.getIndex() > 0 for bonus in self.ideaBonuses.bonuses) 
 
 class IdeaText(QGroupBox):
     def __init__(self, ideaType=None, parent=None):

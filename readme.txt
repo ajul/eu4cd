@@ -26,7 +26,8 @@ This requires cx_Freeze.
 == How to use ==
 
 If you're asked for the game directory, find your Europa Universalis IV directory (the one containing the exe). 
-Save your creations to your mod folder.
+Save your creations to your mod folder. 
+"Overwriting" a mod file will overwrite the current country in that mod, but will not affect other countries.
 
 == Rating ==
 

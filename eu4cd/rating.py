@@ -30,6 +30,16 @@ class RatingWidget(QWidget):
         self.costRating.setReadOnly(True)
         costLayout.addRow(QLabel("Rating"), self.costRating)
 
+        possibleRatings = QGroupBox("Possible ratings")
+        possibleRatingsLayout = QFormLayout()
+        for cost, rating in ideaRatings:
+            if cost is not None:
+                possibleRatingsLayout.addRow(QLabel("Up to %0.1f" % (cost),), QLabel(rating))
+            else:
+                possibleRatingsLayout.addRow(QLabel("Above"), QLabel(rating))
+        possibleRatings.setLayout(possibleRatingsLayout)
+        costLayout.addRow(possibleRatings)
+
         self.cost.setLayout(costLayout)
 
         # penalty display
@@ -78,7 +88,7 @@ class RatingWidget(QWidget):
 def getIdeaRating(cost):
     for maxCost, rating in ideaRatings[:-1]:
         if cost <= maxCost: return rating
-    return ideaRatings[-1]
+    return ideaRatings[-1][0]
 
 ideaRatings = (
     (7.0, "Cannot into relevant"),
@@ -86,5 +96,5 @@ ideaRatings = (
     (11.0, "Normal"),
     (13.0, "Stronk"),
     (15.0, "Stronkest"),
-    "Überstronk",
+    (None, "Überstronk"),
     )
