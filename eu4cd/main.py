@@ -132,6 +132,7 @@ class MainWindow(QMainWindow):
             "eu4cd_convert_provinces_event_title" : "The True Faith",
             "eu4cd_convert_provinces_event_desc" : "$COUNTRYNAME$ follows the one true faith of $COUNTRY_RELIGION$.",
             "eu4cd_convert_provinces_event_option" : "Excellent",
+            
             }
         localization.update(self.ideas.getLocalization(self.overview.tag))
         localization.update(self.overview.getLocalization())

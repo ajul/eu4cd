@@ -90,7 +90,9 @@ class IdeasWidget(QWidget):
         return self.tabs.getCost()
 
     def getLocalization(self, tag):
-        return self.tabs.getLocalization(tag, self.getInternalName())
+        result = self.tabs.getLocalization(tag, self.getInternalName())
+        result[self.getInternalName()] = self.getName()
+        return result
 
     def getPenalties(self):
         return self.tabs.getPenalties()
@@ -100,6 +102,9 @@ class IdeasWidget(QWidget):
 
     def setInternalName(self, internalName):
         self.internalName.setText(internalName)
+
+    def getName(self):
+        return self.name.text()
 
     def setName(self, name):
         self.name.setText(name)
@@ -169,7 +174,6 @@ class IdeasTabWidget(QTabWidget):
 
     def getLocalization(self, tag, ideasInternalName):
         result = {}
-
         result[ideasInternalName + "_start"] = self.traditions.getName()
         result[ideasInternalName + "_bonus"] = self.ambitions.getName()
         
