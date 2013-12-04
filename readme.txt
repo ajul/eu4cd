@@ -15,7 +15,48 @@ The Python version should be cross-platform, although you will need Python and s
 * pyyaml: https://bitbucket.org/xi/pyyaml
 * cx_Freeze (only required if you want to generate a binary): http://cx-freeze.sourceforge.net/
 
+To run the program use
+> python eu4cd.py
+
+To build a binary for your system in build/, use
+> python freeze.py build
+
+This requires cx_Freeze.
+
 == How to use ==
 
 If you're asked for the game directory, find your Europa Universalis IV directory (the one containing the exe). 
 Save your creations to your mod folder.
+
+== Rating ==
+
+There are no hard caps on what items you can pick. Instead the designer will give you a rating consisting of two parts:
+
+=== National idea cost ===
+
+Each bonus you pick for your national ideas has a cost in points. The cost is then totaled up and used to give your national idea group a rating:
+
+7 or less: Cannot into relevant
+7 to 9: Cannot into stronk
+9 to 11: Normal
+11 to 13: Stronk
+13 to 15: Stronkest
+More than 15: Überstronk
+
+The average vanilla national idea group has a cost of 10; the highest cost in vanilla is about 15.
+
+=== Penalties ===
+
+You may also get yellow and red flags for various reasons, including (but not limited to):
+
+* Having a high national idea cost.
+* Upgrading technology group.
+* Starting with extra Mercantilism.
+
+Yellow flags represent bending the rules in minor ways, whereas red flags are more major offenses.
+
+=== Balance ===
+
+Zero flags can be considered a "average" nation; one yellow flag can be considered "fair" relative to vanilla. A red flag or more than one yellow flag is well beyond vanilla.
+
+How balanced is this? Not very. The costs and penalties are set more to resemble vanilla costs and less to enforce balance.
