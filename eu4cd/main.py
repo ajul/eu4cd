@@ -109,7 +109,7 @@ class MainWindow(QMainWindow):
         self.handlePenaltiesChanged()
 
     def save(self):
-        filepath, _ = QFileDialog.getSaveFileName(self, "Save file", self.modPath, "Mod file (*.mod)")
+        filepath, _ = QFileDialog.getSaveFileName(self, "Save mod", self.modPath, "Mod file (*.mod)")
         
         if not filepath: return
 
