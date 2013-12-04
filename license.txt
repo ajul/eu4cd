@@ -1,6 +1,8 @@
 == Europa Universalis IV ==
 
-© 2012 Paradox Interactive. "Europa Universalis IV" is a registered trademark of Paradox Interactive.
+Paradox Interactive, EUROPA UNIVERSALIS® Copyright© [2013] Paradox Interactive AB 
+All rights reserved. 
+www.paradoxplaza.com
 
 == Pyradox and Europa Universalis IV Country Designer ==
 
@@ -28,7 +30,9 @@ THE SOFTWARE.
 
 == pyqt5 ==
 
-Copyright © 2013 Riverbank Computing Limited. Licensed under the GNU General Public License v3.
+Copyright © 2013 Riverbank Computing Limited.
+Licensed under the GNU General Public License v3.
+http://www.gnu.org/licenses/gpl.html
 
 == pyyaml ==
 
