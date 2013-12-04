@@ -3,7 +3,7 @@ import yaml
 
 import pyradox.txt
 
-def writeMod(filepath, ideas=None, events=None, countries=None, localization=None):
+def writeMod(filepath, tag, countryBasename, countryData, ideas, events, localization):
     basedir, basename = os.path.split(filepath)
     root, ext = os.path.splitext(basename)
     
@@ -18,22 +18,15 @@ def writeMod(filepath, ideas=None, events=None, countries=None, localization=Non
 
     # write ideas
     if ideas is not None:
-        ideasPath = os.path.join(basedir, root, 'common', 'ideas', '00_country_ideas_eu4cd_%s.txt' % root)
-        updateFile(ideasPath, ideas)
+        overwriteFile(os.path.join(basedir, root, 'common', 'ideas', '00_00_%s_%s_ideas.txt' % (root, tag)), str(ideas))
 
     # write events
     if events is not None:
-        eventPath = os.path.join(basedir, root, 'events', 'eu4cd_%s_events.txt' % root)
-        updateFile(eventPath, events)
+        overwriteFile(os.path.join(basedir, root, 'events', '%s_%s_events.txt' % (root, tag)), str(events))
 
     # write countries
-    if countries is not None:
-        countriesDir = os.path.join(basedir, root, 'history', 'countries')
-        os.makedirs(countriesDir, exist_ok=True)
-        for countryBasename, data in countries.items():
-            f = open(os.path.join(countriesDir, countryBasename), 'w')
-            f.write(str(data))
-            f.close()
+    if countryData is not None:
+        overwriteFile(os.path.join(basedir, root, 'history', 'countries', countryBasename), str(countryData))
 
     # write localization
     if localization is not None:
@@ -42,10 +35,16 @@ def writeMod(filepath, ideas=None, events=None, countries=None, localization=Non
 
         localization = { 'l_english' : localization }
 
-        # TODO: update existing
-        f = open(os.path.join(localizationPath, 'eu4cd_%s_l_english.yml' % root), 'w')
-        yaml.dump(localization, f, default_flow_style=False)
+        f = open(os.path.join(localizationPath, '%s_%s_l_english.yml' % (root, tag)), 'w')
+        yaml.dump(localization, f, default_flow_style=False, default_style='"')
         f.close()
+
+def overwriteFile(filepath, data):
+    basedir, basename = os.path.split(filepath)
+    os.makedirs(basedir, exist_ok=True)
+    f = open(filepath, "w")
+    f.write(data)
+    f.close()
     
 def updateFile(filepath, data):
     basedir, basename = os.path.split(filepath)
