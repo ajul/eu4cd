@@ -252,7 +252,7 @@ class Idea(QWidget):
         return self.ideaBonuses.getTree()
 
     def setTree(self, ideasInternalName, bonusKey, bonusData):
-        self.ideaText.setTree(ideasInternalName, bonusKey)
+        self.ideaText.setTree(bonusKey)
         self.ideaBonuses.setTree(bonusData)
 
     def getCost(self):
@@ -284,10 +284,8 @@ class IdeaText(QGroupBox):
         
         self.setLayout(layout)
 
-    def setTree(self, ideasInternalName, bonusKey):
-        if bonusKey in ("start", "bonus"):
-            self.name.setText(pyradox.yml.getLocalization(ideasInternalName + "_" + bonusKey, sources = ["text", "countries", "EU4", "powers_and_ideas"]) or "")
-        else:
+    def setTree(self, bonusKey):
+        if bonusKey not in ("start", "bonus"):
             self.internalName.setText(bonusKey + "_custom")
             self.name.setText(pyradox.yml.getLocalization(bonusKey, sources = ["text", "countries", "EU4", "powers_and_ideas"]) or "")
             self.description.setText(pyradox.yml.getLocalization(bonusKey + "_desc", sources = ["text", "countries", "EU4", "powers_and_ideas"]) or "")

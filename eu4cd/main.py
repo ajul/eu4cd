@@ -129,8 +129,8 @@ class MainWindow(QMainWindow):
             events["country_event"]["trigger"]["always"] = False
         
         localization = {
-            "eu4cd_convert_provinces_event_title" : "The True Faith",
-            "eu4cd_convert_provinces_event_desc" : "$COUNTRYNAME$ follows the one true faith of $COUNTRY_RELIGION$.",
+            "eu4cd_convert_provinces_event_title" : "The One True Faith",
+            "eu4cd_convert_provinces_event_desc" : "Our glorious nation of $COUNTRY$ follows the One True Faith of $COUNTRY_RELIGION$.",
             "eu4cd_convert_provinces_event_option" : "Excellent",
             
             }
@@ -167,4 +167,7 @@ class MainWindow(QMainWindow):
 
     def handleCountryLoaded(self):
         self.ideas.setInternalName(self.overview.tag + "_custom_ideas")
-        self.ideas.setName(self.overview.adjective.text() + " Ideas")
+        adjective = self.overview.adjective.text()
+        self.ideas.setName(adjective + " Ideas")
+        self.ideas.tabs.traditions.setName(adjective + " Traditions")
+        self.ideas.tabs.ambitions.setName(adjective + " Ambitions")
