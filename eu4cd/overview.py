@@ -18,6 +18,7 @@ from PyQt5.QtWidgets import (
 class OverviewWidget(QWidget):
     countryLoaded = pyqtSignal()
     penaltiesChanged = pyqtSignal()
+    adjectiveChanged = pyqtSignal(str)
     
     def __init__(self, parent=None):
         super().__init__(parent)
@@ -57,6 +58,7 @@ class OverviewWidget(QWidget):
         self.tagSelect.currentIndexChanged.connect(self.loadCountry)
         self.mercantilismSelect.currentIndexChanged.connect(self.handleMercantilismChanged)
         self.technologyGroupSelect.currentIndexChanged.connect(self.handleTechnologyGroupChanged)
+        self.adjective.textChanged.connect(self.handleAdjectiveChanged)
 
     def reload(self):
         self.tagSelect.reload()
@@ -136,3 +138,6 @@ class OverviewWidget(QWidget):
 
     def handleMercantilismChanged(self):
         self.penaltiesChanged.emit()
+
+    def handleAdjectiveChanged(self, adjective):
+        self.adjectiveChanged.emit(adjective)

@@ -39,44 +39,52 @@ class MainWindow(QMainWindow):
         self.ideas.costChanged.connect(self.handlePenaltiesChanged)
         self.overview.countryLoaded.connect(self.handleCountryLoaded)
         self.overview.penaltiesChanged.connect(self.handlePenaltiesChanged)
+        self.overview.adjectiveChanged.connect(self.handleAdjectiveChanged)
 
         self.setCentralWidget(self.main)
         self.setWindowTitle("Europa Universalis 4 Country Designer")
 
         self.loadConfig()
 
-    def loadConfig(self, forceManualGamePath=False):
+    def loadConfig(self, automatic=True, optional=False):
         try:
             config = pyradox.txt.parseFile('config.txt')
         except:
             config = pyradox.struct.Tree()
 
-        gamePathSearch = (
-            r'C:\Steam\steamapps\common\Europa Universalis IV',
-            r'D:\Steam\steamapps\common\Europa Universalis IV',
-            )
-
-        self.gamePath = ""
-        if 'gamepath' in config and os.path.exists(config['gamepath']):
-            self.gamePath = config['gamepath']
+        if optional:
+            gamePath = QFileDialog.getExistingDirectory(caption = "Select Europa Universalis IV directory", directory = self.gamePath)
+            if gamePath == "":
+                return # canceled
+            else:
+                self.gamePath = gamePath
         else:
-            for location in gamePathSearch:
-                if os.path.exists(location):
-                    self.gamePath = location
+            gamePathSearch = (
+                r'C:\Steam\steamapps\common\Europa Universalis IV',
+                r'D:\Steam\steamapps\common\Europa Universalis IV',
+                )
 
-        if self.gamePath == "" or forceManualGamePath:
-            self.gamePath = QFileDialog.getExistingDirectory(caption = "Select Europa Universalis IV directory", directory = self.gamePath)
+            self.gamePath = ""
+            if 'gamepath' in config and os.path.exists(config['gamepath']):
+                self.gamePath = config['gamepath']
+            else:
+                for location in gamePathSearch:
+                    if os.path.exists(location):
+                        self.gamePath = location
 
-        if 'modpath' in config and os.path.exists(config['modpath']):
-            self.modPath = config['modpath']
-        else:
-            self.modPath = ""
+            if self.gamePath == "" or not automatic:
+                self.gamePath = QFileDialog.getExistingDirectory(caption = "Select Europa Universalis IV directory", directory = self.gamePath)
+
+            if 'modpath' in config and os.path.exists(config['modpath']):
+                self.modPath = config['modpath']
+            else:
+                self.modPath = ""
         try:
             self.reload()
         except Exception as e:
             print(e)
             QMessageBox.critical(None, "Load failed!", "Failed to load game data from %s." % (self.gamePath,))
-            self.loadConfig(forceManualGamePath = True)
+            self.loadConfig(automatic=False)
         else:
             self.writeConfig()
 
@@ -91,8 +99,8 @@ class MainWindow(QMainWindow):
 
     def createMenus(self):
         self.menuFile = self.menuBar().addMenu("&File")
-        self.menuFile.addAction(QAction("&Open", self, shortcut="Ctrl+O", statusTip="Open", triggered=lambda: self.loadConfig(True)))
-        self.menuFile.addAction(QAction("&Save", self, shortcut="Ctrl+S", statusTip="Save", triggered=self.save))
+        self.menuFile.addAction(QAction("L&oad", self, shortcut="Ctrl+O", statusTip="Load game data", triggered=lambda: self.loadConfig(optional=True)))
+        self.menuFile.addAction(QAction("&Save", self, shortcut="Ctrl+S", statusTip="Save mod", triggered=self.save))
         self.menuFile.addAction(QAction("E&xit", self, shortcut="Ctrl+Q", statusTip="Exit the application", triggered=self.close))
 
     def createStatusBar(self):
@@ -149,7 +157,8 @@ class MainWindow(QMainWindow):
             print(e)
             QMessageBox.critical(None, "Save failed!", "Failed to save mod to %s." % (filepath,))
         else:
-            self.writeConfig()
+            self.writeConfig() # successful save, write mod path to config
+            self.statusBar().showMessage("Saved mod to %s." % (filepath,), 5000)
 
     def handleCostChanged(self, cost):
         self.cost.setText("National ideas cost: %0.2f (%s)" % (cost, eu4cd.rating.getIdeaRating(cost)))
@@ -167,7 +176,8 @@ class MainWindow(QMainWindow):
 
     def handleCountryLoaded(self):
         self.ideas.setInternalName(self.overview.tag + "_custom_ideas")
-        adjective = self.overview.adjective.text()
+
+    def handleAdjectiveChanged(self, adjective):
         self.ideas.setName(adjective + " Ideas")
         self.ideas.tabs.traditions.setName(adjective + " Traditions")
         self.ideas.tabs.ambitions.setName(adjective + " Ambitions")
