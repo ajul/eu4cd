@@ -28,8 +28,7 @@ from PyQt5.QtWidgets import (
     QVBoxLayout,
     QWidget,
     )
-
-internalNameValidator = QRegExpValidator(QRegExp("[a-zA-Z]\w*"))
+internalNameValidator = QRegExpValidator(QRegExp("(?!(start|bonus|category|trigger|ai_will_do|important|free)$)[a-zA-Z]\w*"))
 
 class IdeasWidget(QWidget):
     costChanged = pyqtSignal(float)
@@ -103,7 +102,9 @@ class IdeasWidget(QWidget):
         return self.tabs.getPenalties()
 
     def getInternalName(self):
-        return self.internalName.text()
+        result = self.internalName.text()
+        if len(result) == 0: result = "unnamed"
+        return result
 
     def setInternalName(self, internalName):
         self.internalName.setText(internalName)
@@ -251,7 +252,10 @@ class Idea(QWidget):
         pass
 
     def getInternalName(self):
-        return self.ideaText.internalName.text()
+        result = self.ideaText.internalName.text()
+        if len(result) == 0:
+            result = "unnamed"
+        return result
 
     def setInternalName(self, name):
         self.ideaText.internalName.setText(name)
