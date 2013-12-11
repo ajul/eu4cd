@@ -1,3 +1,7 @@
+intValues = (
+    1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 33, 40, 50, 60, 75, 100, 150, 200,
+    )
+
 floatValues = (
     0.002, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03, 0.04, 0.05, 0.06, 0.075, 0.1, 0.15, 0.2, 0.25, 0.3, 0.33, 0.5, 0.66, 0.75, 1.0, 2.0,
     )
@@ -118,8 +122,8 @@ bonusData = (
     ("spy_offence",                 0.2, (0.1, 0.25)), # 0.1 to 0.25?
     ("stability_cost_modifier",     -0.1, (-0.05, -0.2)),
     ("technology_cost",             -0.05, (-0.02, -0.1)),
-    ("tolerance_heathen",           2, (-1, 3)),
-    ("tolerance_heretic",           2, (-1, 4)),
+    ("tolerance_heathen",           2, (1, 3)),
+    ("tolerance_heretic",           2, (1, 4)),
     ("tolerance_own",               2, (1, 4)),
     ("trade_efficiency",            0.075, (0.05, 0.2)), 
     ("trade_range_modifier",        0.25, (0.05, 0.5)), #0.20 or 0.25?
@@ -163,23 +167,27 @@ def generateOptions(bonusTypeIndex):
         values = []
         costs = []
 
-        i = 0
-
-        for value in range(valueRange[0] * sign, valueRange[1] * sign + 1):
-            if value == 0: continue
+        for value in intValues:
+            if value < valueRange[0] * sign: continue
+            if value > valueRange[1] * sign: continue
+            
             cost = value / normalValue * sign
             options.append("%d: %0.2f point(s)" % (value * sign, cost))
             values.append(value * sign)
             costs.append(cost)
 
-            i += 1
+        # negative option
+        negValue = -values[0]
+        negCost = -costs[0]
+        negOption = "%d: %0.2f point(s)" % (negValue, negCost)
+        options = [negOption] + options
+        values = [negValue] + values
+        costs = [negCost] + costs
             
     else: # float
         options = []
         values = []
         costs = []
-
-        i = 0
 
         for value in floatValues:
             if value < valueRange[0] * sign: continue
@@ -190,7 +198,13 @@ def generateOptions(bonusTypeIndex):
             values.append(value * sign)
             costs.append(cost)
 
-            i += 1
+        # negative option
+        negValue = -values[0]
+        negCost = -costs[0]
+        negOption = "%0.3f: %0.2f point(s)" % (negValue, negCost)
+        options = [negOption] + options
+        values = [negValue] + values
+        costs = [negCost] + costs
 
     return options, values, costs
 

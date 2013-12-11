@@ -28,8 +28,10 @@ def readGameData(gamePath):
     global religions, governments
     global ideas, ideaSelects, ideaTrees
 
+    # editing pyradox, a bit hacky
     pyradox.config.basedirs['EU4'] = gamePath
     pyradox.config.defaultGame = 'EU4'
+    pyradox.yml.cache = {}
 
     # tags
     tags = []
