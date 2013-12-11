@@ -29,6 +29,8 @@ from PyQt5.QtWidgets import (
     QWidget,
     )
 
+internalNameValidator = QRegExpValidator(QRegExp("[a-zA-Z]\w*"))
+
 class IdeasWidget(QWidget):
     costChanged = pyqtSignal(float)
     
@@ -53,8 +55,11 @@ class IdeasWidget(QWidget):
         headerLayout = QFormLayout()
 
         self.internalName = QLineEdit()
+        self.internalName.setValidator(internalNameValidator)
+        
         headerLayout.addRow(QLabel("Internal name:"), self.internalName)
         self.name = QLineEdit()
+        
         headerLayout.addRow(QLabel("Name:"), self.name)
 
         headerLayout.addRow(QLabel("Load ideas:"), self.loader)
@@ -287,7 +292,7 @@ class IdeaText(QGroupBox):
         # internal name
         if ideaType is None:
             self.internalName = QLineEdit()
-            self.internalName.setValidator(QRegExpValidator(QRegExp("\w+")))
+            self.internalName.setValidator(internalNameValidator)
 
             layout.addRow(QLabel("Internal name:"), self.internalName)
 
