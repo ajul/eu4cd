@@ -134,6 +134,16 @@ bonusData = (
     ("war_exhaustion_cost",         -0.2, (-0.1, -0.33)), # -0.1 to -0.2?
     )
 
+nonPercentFloats = set([
+    "army_tradition",
+    "hostile_attrition",
+    "inflation_reduction",
+    "legitimacy",
+    # "republican_tradition",
+    "navy_tradition",
+    "prestige",
+    ])
+
 redCardForDuplicates = set([
     "army_tradition_decay",
     "land_maintenance_modifier",
@@ -146,8 +156,8 @@ redCardForDuplicates = set([
 bonusTypes, bonusNormalValue, bonusRange = zip(*bonusData)
 
 def generateOptions(bonusTypeIndex):
-    normalValue = bonusNormalValue[bonusTypeIndex]
-    valueRange = bonusRange[bonusTypeIndex]
+    bonusType, normalValue, valueRange = bonusData[bonusTypeIndex]
+
     if normalValue > 0:
         sign = 1
     else:
@@ -172,14 +182,14 @@ def generateOptions(bonusTypeIndex):
             if value > valueRange[1] * sign: continue
             
             cost = value / normalValue * sign
-            options.append("%d: %0.2f point(s)" % (value * sign, cost))
+            options.append("%+d: %0.2f point(s)" % (value * sign, cost))
             values.append(value * sign)
             costs.append(cost)
 
         # negative option
         negValue = -values[0]
         negCost = -costs[0]
-        negOption = "%d: %0.2f point(s)" % (negValue, negCost)
+        negOption = "%+d: %0.2f point(s)" % (negValue, negCost)
         options = [negOption] + options
         values = [negValue] + values
         costs = [negCost] + costs
@@ -194,14 +204,21 @@ def generateOptions(bonusTypeIndex):
             if value > valueRange[1] * sign: continue
 
             cost = value / normalValue * sign
-            options.append("%0.3f: %0.2f point(s)" % (value * sign, cost))
+
+            if bonusType in nonPercentFloats:
+                options.append("%+0.3f: %0.2f point(s)" % (value * sign, cost))
+            else:
+                options.append("%+0.1f%%: %0.2f point(s)" % (value * sign * 100.0, cost))
             values.append(value * sign)
             costs.append(cost)
 
         # negative option
         negValue = -values[0]
-        negCost = -costs[0]
-        negOption = "%0.3f: %0.2f point(s)" % (negValue, negCost)
+        negCost = -costs[0] * 0.5 # only returns half points
+        if bonusType in nonPercentFloats:
+            negOption = "%+0.3f: %0.2f point(s)" % (negValue, negCost)
+        else:
+            negOption = "%+0.1f%%: %0.2f point(s)" % (negValue * 100.0, negCost)
         options = [negOption] + options
         values = [negValue] + values
         costs = [negCost] + costs

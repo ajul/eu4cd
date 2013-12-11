@@ -167,10 +167,10 @@ class IdeasTabWidget(QTabWidget):
                 i += 1
 
     def getCost(self):
-        cost = 0.0
-        for idea in self.getAllIdeas():
-            cost += idea.getCost()
-        return cost
+        return sum(idea.getCost() for idea in self.getAllIdeas())
+
+    def getNegativeCost(self):
+        return sum(idea.getNegativeCost() for idea in self.getAllIdeas())
 
     def getLocalization(self, tag, ideasInternalName):
         result = {}
@@ -189,13 +189,15 @@ class IdeasTabWidget(QTabWidget):
         cost = self.getCost()
         if cost > 15.0:
             redCards.append("National ideas cost more than 15.0 points.")
-        elif cost > 10.0:
-            yellowCards.append("National ideas cost more than 10.0 points.")
+        elif cost > 11.0:
+            yellowCards.append("National ideas cost more than 11.0 points.")
 
         # empty ideas
         for idea in self.getAllIdeas():
             if idea.isEmpty():
                 redCards.append("Idea %s has no bonuses." % (idea.getName(),))
+            elif idea.getCost() <= 0.0:
+                redCards.append("Idea %s has non-positive cost." % (idea.getName(),))
 
         # duplicate ideas
         bonusTypes = []
@@ -204,7 +206,12 @@ class IdeasTabWidget(QTabWidget):
 
         for i, bonusType in enumerate(bonusTypes):
             if bonusType in bonusTypes[i+1:] and bonusType in eu4cd.ideaoptions.redCardForDuplicates:
-                redCards.append("Duplicate bonus not allowed for %s." % (bonusType,))
+                redCards.append("Duplicate bonus in %s." % (bonusType,))
+
+        # excessive negatives
+        negativeCost = self.getNegativeCost()
+        if negativeCost < -1.0:
+            redCards.append("Negative bonuses costing less than -1.0 points.")
 
         return yellowCards, redCards
 
@@ -262,6 +269,9 @@ class Idea(QWidget):
 
     def getCost(self):
         return self.ideaBonuses.getCost()
+
+    def getNegativeCost(self):
+        return self.ideaBonuses.getNegativeCost()
 
     def handleCostChanged(self):
         self.costChanged.emit()
@@ -342,6 +352,9 @@ class IdeaBonuses(QGroupBox):
 
     def getCost(self):
         return sum(bonus.getCost() for bonus in self.bonuses)
+
+    def getNegativeCost(self):
+        return sum(min(bonus.getCost(), 0.0) for bonus in self.bonuses)
 
     def handleCostChanged(self):
         self.costChanged.emit()

@@ -53,11 +53,15 @@ You may also get yellow and red cards for various reasons, including (but not li
 * Having a high national idea cost.
 * Upgrading technology group.
 * Starting with extra Mercantilism.
+* Having empty ideas or ideas with negative cost.
 
-Yellow cards represent bending the rules in minor ways, whereas red cards are more major offenses.
+Yellow cards represent bending the rules in minor ways, whereas red cards indicate a more major offense, or an ill-formed idea set.
 
 === Balance ===
 
-Zero cards can be considered a "average" nation; one yellow card can be considered "fair" relative to vanilla. A red card or more than one yellow card is well beyond vanilla.
+Zero cards can be considered a "average" nation; one yellow card can be considered "fair" relative to vanilla. A red card or more than one yellow card is well beyond vanilla or indicates a ill-formed idea set.
 
-How balanced is this? Not very. The costs and penalties are set more to resemble vanilla costs and less to enforce balance.
+How exploitable is the system? Very. I've set the points more towards the average strength of each bonus and so that existing sets can be reproduced, and less towards some idea of actual balance. The only places I've made significant concessions to actual balance are:
+
+* Leader Fire/Shock costs 1.5 points, even though all bonuses have it as 1.
+* Yearly Republican Tradition costs 2 points, even though all bonuses have it at 1. (Still overpowered!)

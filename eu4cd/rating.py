@@ -22,21 +22,21 @@ class RatingWidget(QWidget):
         self.cost = QGroupBox("National ideas")
         costLayout = QFormLayout()
 
-        self.costDisplay = QLineEdit()
-        self.costDisplay.setReadOnly(True)
-        costLayout.addRow(QLabel("Cost"), self.costDisplay)
-
         self.costRating = QLineEdit()
         self.costRating.setReadOnly(True)
-        costLayout.addRow(QLabel("Rating"), self.costRating)
+        costLayout.addRow(QLabel("Rating:"), self.costRating)
+
+        self.costDisplay = QLineEdit()
+        self.costDisplay.setReadOnly(True)
+        costLayout.addRow(QLabel("Cost:"), self.costDisplay)
 
         possibleRatings = QGroupBox("Possible ratings")
         possibleRatingsLayout = QFormLayout()
         for cost, rating in ideaRatings:
             if cost is not None:
-                possibleRatingsLayout.addRow(QLabel("Up to %0.1f" % (cost),), QLabel(rating))
+                possibleRatingsLayout.addRow(QLabel("Up to %0.1f:" % (cost),), QLabel(rating))
             else:
-                possibleRatingsLayout.addRow(QLabel("Above"), QLabel(rating))
+                possibleRatingsLayout.addRow(QLabel("Above:"), QLabel(rating))
         possibleRatings.setLayout(possibleRatingsLayout)
         costLayout.addRow(possibleRatings)
 
@@ -46,6 +46,10 @@ class RatingWidget(QWidget):
         self.penalties = QGroupBox("Penalties")
         penaltiesLayout = QFormLayout()
 
+        # self.penaltiesRating = QLineEdit()
+        # self.penaltiesRating.setReadOnly(True)
+        # penaltiesLayout.addRow(QLabel("Rating:"), self.penaltiesRating)
+        
         self.yellowCardCount = QLineEdit()
         self.yellowCardCount.setReadOnly(True)
         penaltiesLayout.addRow(QLabel("Yellow cards:"), self.yellowCardCount)
@@ -84,11 +88,20 @@ class RatingWidget(QWidget):
         self.yellowCards.setStringList(yellow)
         self.redCardCount.setText("%d" % (len(red),))
         self.redCards.setStringList(red)
+        # self.penaltiesRating.setText(getPenaltiesRating(len(yellow), len(red)))
     
 def getIdeaRating(cost):
     for maxCost, rating in ideaRatings[:-1]:
         if cost <= maxCost: return rating
     return ideaRatings[-1][0]
+
+def getPenaltiesRating(yellowCount, redCount):
+    if redCount > 0 or yellowCount > 1:
+        return "Red"
+    elif yellowCount > 0:
+        return "Yellow"
+    else:
+        return "Green"
 
 ideaRatings = (
     (7.0, "Cannot into relevant"),
