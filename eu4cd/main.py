@@ -78,7 +78,10 @@ class MainWindow(QMainWindow):
             if 'modpath' in config and os.path.exists(config['modpath']):
                 self.modPath = config['modpath']
             else:
-                self.modPath = ""
+                homeDir = os.path.expanduser("~")
+                self.modPath = os.path.join(homeDir, "Documents", "Paradox Interactive", "Europa Universalis IV", "mod")
+                if not os.path.exists(self.modPath):
+                    self.modPath = ""
         try:
             self.reload()
         except Exception as e:
