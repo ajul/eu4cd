@@ -16,7 +16,7 @@ bonusData = (
     ("artillery_cost",              -0.2, (-0.05, -0.2)),
     ("artillery_power",             0.1, (0.05, 0.2)),
     ("auto_explore_adjacent_to_colony", 2.0, (True, True)), # bool), cost 1/2
-    ("blockade_efficiency",         0.33, (0.33, 0.33)), #?
+    ("blockade_efficiency",         1/3, (0.33, 0.33)), #?
     ("build_cost",                  -0.2, (-0.05, -0.33)), #-0.1 to -0.2?
     ("cavalry_cost",                -0.2, (-0.05, -0.2)),
     ("cavalry_power",               0.1, (0.05, 0.25)),
@@ -25,7 +25,7 @@ bonusData = (
     ("cb_on_primitives",            1.0, (True, True)), # bool
     ("cb_on_religious_enemies",     1.0, (True, True)), # bool
     ("colonists",                   1, (1, 1)),
-    ("colonist_time",               -0.33, (-0.1, -0.33)), # Expansion only
+    ("colonist_time",               -1/3, (-0.1, -0.33)), # Expansion only
     ("core_creation",               -0.15, (-0.1, -0.33)),
     ("defensiveness",               0.2, (0.1, 0.3)),
     ("dip_tech_cost_modifier",      -0.1, (-0.05, -0.25)), # unused
@@ -34,7 +34,7 @@ bonusData = (
     ("diplomats",                   1, (1, 1)),
     ("discipline",                  0.1, (0.05, 0.2)),
     ("discovered_relations_impact", -0.25, (-0.1, -0.25)),
-    ("embargo_efficiency",          0.33, (0.1, 0.33)),
+    ("embargo_efficiency",          1/3, (0.1, 0.33)),
     ("enemy_core_creation",         1.0, (0.5, 2.0)),
     ("extra_manpower_at_religious_war", 1.0, (True, True)), # bool
     ("fabricate_claims_time",       -0.25, (-0.1, -0.25)),
@@ -43,7 +43,7 @@ bonusData = (
     ("galley_power",                0.2, (0.1, 0.5)), #?
     ("global_colonial_growth",      25, (15, 50)), #?
     ("global_foreign_trade_power",  0.2, (0.05, 0.25)), # adjusted downwards
-    ("global_manpower_modifier",    0.33, (0.05, 1.0)), # 0.2 to 0.5?
+    ("global_manpower_modifier",    1/3, (0.05, 1.0)), # 0.2 to 0.5?
     ("global_garrison_growth",      0.1, (0.05, 0.2)),
     ("global_missionary_strength",  0.02, (0.01, 0.03)),
     ("global_own_trade_power",      0.2, (0.05, 0.25)), 
@@ -73,7 +73,7 @@ bonusData = (
     ("land_forcelimit_modifier",    0.25, (0.1, 0.5)), # few examples
     ("land_maintenance_modifier",   -0.15, (-0.1, -0.25)), # decrease cost?
     ("land_morale",                 0.1, (0.05, 0.25)),
-    ("leader_fire",                 2/3, (1, 1)), # adjusted upwards
+    ("leader_fire",                 0.67, (1, 1)), # adjusted upwards
     ("leader_land_manuever",        1, (1, 1)),
     ("leader_naval_manuever",       2, (1, 2)),
     ("leader_shock",                2/3, (1, 1)), # adjusted upwards
