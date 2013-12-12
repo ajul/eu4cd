@@ -48,7 +48,7 @@ class MainWindow(QMainWindow):
         self.overview.adjectiveChanged.connect(self.handleAdjectiveChanged)
 
         self.setCentralWidget(self.main)
-        self.setWindowTitle("Europa Universalis 4 Country Designer")
+        self.setWindowTitle("Unofficial Europa Universalis IV Country Designer")
 
         self.loadConfig()
 
@@ -213,7 +213,7 @@ class AboutBox(QMessageBox):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("About")
-        self.setText("The Unofficial Europa Universalis IV Country Designer")
+        self.setText("Unofficial Europa Universalis IV Country Designer")
         self.setInformativeText("Version %s" % version)
         
         f = open("license.txt")
