@@ -1,5 +1,7 @@
 import os
 
+import webbrowser
+
 import eu4cd.gamedata
 import eu4cd.idea
 import eu4cd.mod
@@ -11,12 +13,16 @@ import pyradox.txt
 
 from PyQt5.QtWidgets import (
     QAction,
+    QDialog,
     QFileDialog,
     QLabel,
     QMainWindow,
     QMessageBox,
+    QSizePolicy,
     QTabWidget,
     )
+
+version = '0.5'
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -101,10 +107,28 @@ class MainWindow(QMainWindow):
         f.close()
 
     def createMenus(self):
+        def openParadoxplaza():
+            webbrowser.open("about:blank") # fill in
+            
+        def openSourceforge():
+            webbrowser.open("https://sourceforge.net/projects/eu4cd/")
+        
         self.menuFile = self.menuBar().addMenu("&File")
         self.menuFile.addAction(QAction("L&oad game data", self, shortcut="Ctrl+O", statusTip="Load game data", triggered=lambda: self.loadConfig(optional=True)))
         self.menuFile.addAction(QAction("&Save mod", self, shortcut="Ctrl+S", statusTip="Save mod", triggered=self.save))
+        self.menuFile.addSeparator()
         self.menuFile.addAction(QAction("E&xit", self, shortcut="Ctrl+Q", statusTip="Exit the application", triggered=self.close))
+
+        self.menuHelp = self.menuBar().addMenu("&Help")
+        self.menuHelp.addAction(QAction("&Paradoxplaza forum topic", self, triggered=openParadoxplaza))
+        self.menuHelp.addAction(QAction("&Sourceforge project page", self, triggered=openSourceforge))
+        self.menuHelp.addSeparator()
+        self.menuHelp.addAction(QAction("&About", self, triggered=self.about))
+
+    def about(self):
+        dialog = AboutBox()
+        dialog.exec()
+        
 
     def createStatusBar(self):
         self.cost = QLabel()
@@ -184,3 +208,15 @@ class MainWindow(QMainWindow):
         self.ideas.setName(adjective + " Ideas")
         self.ideas.tabs.traditions.setName(adjective + " Traditions")
         self.ideas.tabs.ambitions.setName(adjective + " Ambitions")
+
+class AboutBox(QMessageBox):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle("About")
+        self.setText("The Unofficial Europa Universalis IV Country Designer")
+        self.setInformativeText("Version %s" % version)
+        
+        f = open("license.txt")
+        licenseText = f.read()
+        f.close()
+        self.setDetailedText(licenseText)
