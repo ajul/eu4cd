@@ -396,7 +396,7 @@ class IdeaBonus(QWidget):
 
     def resetBonusValue(self, index):
         options, self.values, self.costs = eu4cd.ideaoptions.generateOptions(index)
-        defaultIndex = eu4cd.ideaoptions.getClosestValueIndex(self.values, eu4cd.ideaoptions.bonusNormalValue[index])
+        defaultIndex = eu4cd.ideaoptions.getClosestValueIndex(self.values, eu4cd.ideaoptions.bonusNormalValues[index])
         self.bonusValueSelect.clear()
         self.bonusValueSelect.addItems(options)
         self.bonusValueSelect.setCurrentIndex(defaultIndex)

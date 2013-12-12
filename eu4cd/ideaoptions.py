@@ -153,7 +153,7 @@ redCardForDuplicates = set([
     "prestige_decay",
     ])
 
-bonusTypes, bonusNormalValue, bonusRange = zip(*bonusData)
+bonusTypes, bonusNormalValues, bonusRanges = zip(*bonusData)
 
 def generateOptions(bonusTypeIndex):
     bonusType, normalValue, valueRange = bonusData[bonusTypeIndex]
