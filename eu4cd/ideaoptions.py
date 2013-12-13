@@ -118,7 +118,7 @@ bonusData = (
     ("reduced_stab_impacts",        1.0, (True, True)), # bool
     ("reinforce_speed",             0.2, (0.1, 0.3)), # 0.15 to 0.30?
     ("relations_decay_of_me",       0.3, (0.1, 0.3)), # exclude Religious +100%
-    ("religious_unity",             0.25, (0.2, 0.5)),
+    ("religious_unity",             1/3, (0.2, 0.5)),
     ("republican_tradition",        0.005, (0.005, 0.01)), # cost adjusted upwards
     ("sea_repair",                  1.0, (True, True)), # bool
     ("spy_offence",                 0.2, (0.1, 0.25)), # 0.1 to 0.25?
