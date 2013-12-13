@@ -33,25 +33,31 @@ class OverviewWidget(QWidget):
 
         self.adjective = QLineEdit()
         layout.addRow(QLabel("Adjective:"), self.adjective)
-        
+
+        technologyGroupLabel = QLabel("Technology group:")
+        technologyGroupLabel.setToolTip("Upgrading starting technology group will give a penalty card.")
         self.technologyGroupSelect = eu4cd.gamedata.TechnologyGroupSelect()
-        layout.addRow(QLabel("Technology group:"), self.technologyGroupSelect)
+        self.technologyGroupSelect.setToolTip("Upgrading starting technology group will give a penalty card.")
+        layout.addRow(technologyGroupLabel, self.technologyGroupSelect)
         
         self.religionSelect = eu4cd.gamedata.ReligionSelect()
         layout.addRow(QLabel("Religion:"), self.religionSelect)
 
         religionConvertLabel = QLabel("Convert religion:")
-        religionConvertLabel.setToolTip("Convert all provinces via event at game start.")
+        religionConvertLabel.setToolTip("If checked, all provinces will be converted via event at game start.")
         self.religionConvert = QCheckBox()
-        self.religionConvert.setToolTip("Convert all provinces via event at game start.")
+        self.religionConvert.setToolTip("If checked, all provinces will be converted via event at game start.")
         layout.addRow(religionConvertLabel, self.religionConvert)
 
         self.governmentSelect = eu4cd.gamedata.GovernmentSelect()
         layout.addRow(QLabel("Government:"), self.governmentSelect)
 
+        mercantilismLabel = QLabel("Mercantilism:")
+        mercantilismLabel.setToolTip("Starting mercantilism is determined by government type.")
         self.mercantilism = QLineEdit()
+        self.mercantilism.setToolTip("Starting mercantilism is determined by government type.")
         self.mercantilism.setReadOnly(True)
-        layout.addRow(QLabel("Mercantilism:"), self.mercantilism)
+        layout.addRow(mercantilismLabel, self.mercantilism)
         
         self.setLayout(layout)
 
