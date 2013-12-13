@@ -49,14 +49,15 @@ class OverviewWidget(QWidget):
         self.governmentSelect = eu4cd.gamedata.GovernmentSelect()
         layout.addRow(QLabel("Government:"), self.governmentSelect)
 
-        self.mercantilismSelect = eu4cd.gamedata.MercantilismSelect()
-        layout.addRow(QLabel("Mercantilism:"), self.mercantilismSelect)
+        self.mercantilism = QLineEdit()
+        self.mercantilism.setReadOnly(True)
+        layout.addRow(QLabel("Mercantilism:"), self.mercantilism)
         
         self.setLayout(layout)
 
         # signals
         self.tagSelect.currentIndexChanged.connect(self.loadCountry)
-        self.mercantilismSelect.currentIndexChanged.connect(self.handleMercantilismChanged)
+        self.governmentSelect.currentIndexChanged.connect(self.handleGovernmentChanged)
         self.technologyGroupSelect.currentIndexChanged.connect(self.handleTechnologyGroupChanged)
         self.adjective.textChanged.connect(self.handleAdjectiveChanged)
 
@@ -78,10 +79,6 @@ class OverviewWidget(QWidget):
             self.technologyGroupSelect.setCurrentIndex(self.defaultTechnologyGroup)
             self.religionSelect.setCurrentIndex(eu4cd.gamedata.religions.index(self.countryData["religion"]))
             self.governmentSelect.setCurrentIndex(eu4cd.gamedata.governments.index(self.countryData["government"]))
-            if "mercantilism" in self.countryData and self.countryData["mercantilism"] > 10.0:
-                self.mercantilismSelect.setCurrentIndex(1)
-            else:
-                self.mercantilismSelect.setCurrentIndex(0)
 
         self.countryLoaded.emit()
 
@@ -107,10 +104,7 @@ class OverviewWidget(QWidget):
         result.insert(0, "religion", eu4cd.gamedata.religions[self.religionSelect.currentIndex()])
         result.insert(0, "government", eu4cd.gamedata.governments[self.governmentSelect.currentIndex()])
         
-        if self.mercantilismSelect.currentIndex() == 0:
-            result.insert(0, "mercantilism", 10.0)
-        else:
-            result.insert(0, "mercantilism", 25.0)
+        result.insert(0, "mercantilism", eu4cd.gamedata.governmentMercantilisms[self.governmentSelect.currentIndex()])
 
         return result
 
@@ -131,13 +125,10 @@ class OverviewWidget(QWidget):
             else:
                 redCards.append("Upgraded technology group to Western from lower power.")
 
-        # mercantilism
-        if self.mercantilismSelect.currentIndex() > 0:
-            yellowCards.append("Bonus mercantilism.")
         return yellowCards, redCards
 
-    def handleMercantilismChanged(self):
-        self.penaltiesChanged.emit()
+    def handleGovernmentChanged(self, index):
+        self.mercantilism.setText("%0.1f%%" % (eu4cd.gamedata.governmentMercantilisms[index] * 100.0))
 
     def handleAdjectiveChanged(self, adjective):
         self.adjectiveChanged.emit(adjective)

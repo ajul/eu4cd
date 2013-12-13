@@ -17,6 +17,7 @@ technologyGroups = []
 technologyPowers = []
 religions = []
 governments = []
+governmentMercantilisms = []
 
 ideas = []
 ideaSelects = []
@@ -25,7 +26,7 @@ ideaTrees = []
 def readGameData(gamePath):
     global tags, tagFiles, tagNames, tagSelects, tagAdjectives
     global technologyGroups, technologyPowers
-    global religions, governments
+    global religions, governments, governmentMercantilisms
     global ideas, ideaSelects, ideaTrees
 
     # editing pyradox, a bit hacky
@@ -78,6 +79,17 @@ def readGameData(gamePath):
     # governments
     governmentData = pyradox.txt.parseMerge(os.path.join(gamePath, "common", "governments"))
     governments = list(governmentData.keys())
+    
+    governmentMercantilisms = []
+    for data in governmentData.values():
+        mercantilism = 0.1
+        if "republic" in data.keys():
+            mercantilism += 0.1
+        if "merchants" in data.keys():
+            mercantilism += 0.05
+
+        governmentMercantilisms.append(mercantilism)
+        
 
     # ideas
     ideasData = pyradox.txt.parseMerge(os.path.join(gamePath, "common", "ideas"))
@@ -133,11 +145,6 @@ class GovernmentSelect(QComboBox):
     def reload(self):
         self.clear()
         self.addItems(governments)
-
-class MercantilismSelect(QComboBox):
-    def __init__(self, parent=None):
-        super().__init__(parent)
-        self.addItems(["10", "25"])
 
 class IdeasSelect(QComboBox):
     def __init__(self, parent=None):
