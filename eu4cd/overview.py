@@ -53,9 +53,9 @@ class OverviewWidget(QWidget):
         layout.addRow(QLabel("Government:"), self.governmentSelect)
 
         mercantilismLabel = QLabel("Mercantilism:")
-        mercantilismLabel.setToolTip("Starting mercantilism is determined by government type.")
+        mercantilismLabel.setToolTip("Republics start with higher mercantilism.")
         self.mercantilism = QLineEdit()
-        self.mercantilism.setToolTip("Starting mercantilism is determined by government type.")
+        self.mercantilism.setToolTip("Republics start with higher mercantilism.")
         self.mercantilism.setReadOnly(True)
         layout.addRow(mercantilismLabel, self.mercantilism)
         
