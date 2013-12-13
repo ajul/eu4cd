@@ -94,11 +94,11 @@ class MainWindow(QMainWindow):
             self.reload()
         except IOError as e:
             print(traceback.format_exc())
-            QMessageBox.critical(None, "Load failed!", "Could not read game data from %s." % (self.gamePath,))
+            QMessageBox.critical(None, "Load failed!", "Could not read game data from %s: %s" % (self.gamePath, e))
             self.loadConfig(automatic=False)
-        except SyntaxError as e:
+        except pyradox.txt.ParseError as e:
             print(traceback.format_exc())
-            QMessageBox.critical(None, "Load failed!", "Syntax error when reading game data from %s." % (self.gamePath,))
+            QMessageBox.critical(None, "Load failed!", "Syntax error when reading game data from %s:\n%s" % (self.gamePath, e))
             self.loadConfig(automatic=False)
         else:
             self.writeConfig()
@@ -126,10 +126,10 @@ class MainWindow(QMainWindow):
         self.menuFile.addAction(QAction("E&xit", self, shortcut="Ctrl+Q", statusTip="Exit the application", triggered=self.close))
 
         self.menuHelp = self.menuBar().addMenu("&Help")
-        self.menuHelp.addAction(QAction("&Paradoxplaza forum topic", self, triggered=openParadoxplaza))
-        self.menuHelp.addAction(QAction("&Sourceforge project page", self, triggered=openSourceforge))
+        self.menuHelp.addAction(QAction("&Paradoxplaza forum topic", self, statusTip="Visit the forum topic", triggered=openParadoxplaza))
+        self.menuHelp.addAction(QAction("&Sourceforge project page", self, statusTip="Visit the project page", triggered=openSourceforge))
         self.menuHelp.addSeparator()
-        self.menuHelp.addAction(QAction("&About", self, triggered=self.about))
+        self.menuHelp.addAction(QAction("&About", self, statusTip="View version and license information", triggered=self.about))
 
     def about(self):
         dialog = AboutBox()
@@ -188,9 +188,9 @@ class MainWindow(QMainWindow):
                                ideas=ideas,
                                events=events,
                                localization=localization)
-        except Exception as e:
+        except IOError as e:
             print(traceback.format_exc())
-            QMessageBox.critical(None, "Save failed!", "Failed to save mod to %s." % (filepath,))
+            QMessageBox.critical(None, "Save failed!", "Could not save mod to %s:\n%s" % (filepath, e))
         else:
             self.writeConfig() # successful save, write mod path to config
             self.statusBar().showMessage("Saved mod to %s." % (filepath,), 5000)
