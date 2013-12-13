@@ -3,7 +3,8 @@ intValues = (
     )
 
 floatValues = (
-    0.002, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03, 0.04, 0.05, 0.06, 0.075, 0.1, 0.15, 0.2, 0.25, 0.3, 0.33, 0.4, 0.5, 0.6, 0.66, 0.75, 1.0, 1.5, 2.0,
+    0.002, 0.005, 0.01, 0.015, 0.02, 0.025, 0.03, 0.04, 0.05, 0.06, 0.075, 0.1, 0.15, 0.2, 0.25, 0.3, 0.33, 0.4, 0.5, 0.6, 0.66, 0.75,
+    1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0,
     )
 
 # comments refer to normal value
@@ -28,7 +29,7 @@ bonusData = (
     ("colonists",                   1, (1, 1)),
     ("colonist_time",               -1/3, (-0.1, -0.33)), # Expansion only
     ("core_creation",               -0.15, (-0.1, -0.33)),
-    ("defensiveness",               0.2, (0.1, 0.3)),
+    ("defensiveness",               0.2, (0.1, 0.4)),
     ("dip_tech_cost_modifier",      -0.1, (-0.05, -0.25)), # unused
     ("diplomatic_reputation",       2, (1, 5)),
     ("diplomatic_upkeep",           2, (1, 3)),
@@ -105,7 +106,7 @@ bonusData = (
     ("overseas_income",             0.2, (0.1, 0.3)), #0.1 or 0.2?
     ("papal_influence",             2, (1, 5)), # 2 or 3?
     ("possible_mercenaries",        0.5, (0.25, 1.0)),
-    ("prestige",                    1.0, (0.5, 2.0)),
+    ("prestige",                    1.0, (0.5, 5.0)),
     ("prestige_decay",              -0.02, (-0.01, -0.02)),
     ("prestige_from_land",          1.0, (0.5, 1.0)), # Naval only
     ("prestige_from_naval",         1.0, (0.5, 1.0)), # Offensive only

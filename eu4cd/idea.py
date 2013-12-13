@@ -226,7 +226,8 @@ class IdeasTabWidget(QTabWidget):
             if i == 0:
                 if cost > 4.0:
                     yellowCards.append("Cost of traditions exceeds 4.00.")
-            elif i <= 7:
+            elif i <= 6:
+                # no restriction on last idea
                 if cost > 3.0:
                     yellowCards.append("Cost of idea %s exceeds 3.00." % (idea.getName(),))
 
@@ -382,7 +383,7 @@ class IdeaBonuses(QGroupBox):
 
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
 
-        self.setToolTip("Total cost for each idea should be positive and no more than 3.00 (4.00 for traditions). Taking duplicates of some bonuses will result in penalty cards.")
+        self.setToolTip("Total cost for each idea should be positive but not too large. Taking duplicates of some bonuses will result in penalty cards.")
 
     def getTree(self):
         tree = pyradox.struct.Tree()
