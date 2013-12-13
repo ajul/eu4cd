@@ -98,7 +98,7 @@ bonusData = (
     ("naval_forcelimit_modifier",   0.25, (0.1, 0.5)), # 0.25 or 0.5?
     ("naval_maintenance_modifier",  -0.25, (-0.1, -0.33)), # -0.2), -0.25), or -0.33?
     ("naval_morale",                0.2, (0.1, 0.5)),
-    ("navy_tradition",              1.0, (0.25, 1.0)),
+    ("navy_tradition",              0.5, (0.25, 1.0)),
     ("navy_tradition_decay",        -0.01, (-0.005, -0.01)),
     ("no_cost_for_reinforcing",     1.0, (True, True)), # bool
     ("no_religion_penalty",         1.0, (True, True)), # bool
