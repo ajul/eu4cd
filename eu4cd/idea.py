@@ -237,7 +237,7 @@ class IdeasTabWidget(QTabWidget):
             bonusTypes += list(idea.ideaBonuses.getBonusTypes())
 
         for i, bonusType in enumerate(bonusTypes):
-            if bonusType in bonusTypes[i+1:] and bonusType in eu4cd.ideaoptions.redCardForDuplicates:
+            if bonusType in bonusTypes[i+1:] and not eu4cd.ideaoptions.allowDuplicate(bonusType):
                 redCards.append("Duplicate bonus in %s." % (bonusType,))
 
         # excessive negatives

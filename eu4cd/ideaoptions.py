@@ -16,12 +16,12 @@ bonusData = (
     ("army_tradition",              0.5, (0.25, 1.0)), #0.5 to 0.1
     ("army_tradition_decay",        -0.01, (-0.005, -0.01)),
     ("artillery_cost",              -0.2, (-0.05, -0.33)),
-    ("artillery_power",             0.1, (0.05, 0.25)),
+    ("artillery_power",             0.1, (0.05, 0.33)),
     ("auto_explore_adjacent_to_colony", 4.0, (True, True)), # bool), cost 1/4
     ("blockade_efficiency",         1/3, (0.33, 0.33)), # Oman only
     ("build_cost",                  -0.2, (-0.05, -0.33)), #-0.1 to -0.2?
     ("cavalry_cost",                -0.2, (-0.05, -0.33)), 
-    ("cavalry_power",               0.1, (0.05, 0.25)),
+    ("cavalry_power",               0.1, (0.05, 0.33)),
     ("cb_on_government_enemies",    1.0, (True, True)), # bool
     ("cb_on_overseas",              1.0, (True, True)), # bool
     ("cb_on_primitives",            1.0, (True, True)), # bool
@@ -55,7 +55,7 @@ bonusData = (
     ("global_revolt_risk",          -1, (-1, -2)),
     ("global_ship_cost",            -0.1, (-0.05, -0.1)),
     ("global_ship_recruit_speed",   -0.1, (-0.05, -0.1)),
-    ("global_spy_defence",          0.25, (0.05, 0.1)),
+    ("global_spy_defence",          0.25, (0.05, 0.5)),
     ("global_tariffs",              0.2, (0.05, 0.2)), # Spain only
     ("global_tax_modifier",         0.1, (0.05, 0.2)),
     ("global_trade_income_modifier", 0.1, (0.05, 0.2)),
@@ -68,11 +68,11 @@ bonusData = (
     ("idea_cost",                   -0.1, (-0.05, -0.1)),
     ("imperial_authority",          0.1, (0.05, 0.1)), #split between 0.1 and 0.05
     ("infantry_cost",               -0.2, (-0.1, -0.33)), #OP?
-    ("infantry_power",              0.1, (0.05, 0.25)),
-    ("inflation_action_cost",       -0.15, (-0.1, -0.2)),
+    ("infantry_power",              0.1, (0.05, 0.25)), # limit to 0.25
+    ("inflation_action_cost",       -0.15, (-0.05, -0.25)),
     ("inflation_reduction",         0.1, (0.05, 0.1)), #split between 0.1 and 0.05
     ("interest",                    -1.0, (-0.5, -1)),
-    ("land_attrition",              -0.1, (-0.05, -0.2)),
+    ("land_attrition",              -0.1, (-0.05, -0.25)),
     ("land_forcelimit_modifier",    0.25, (0.1, 0.5)), # few examples
     ("land_maintenance_modifier",   -0.15, (-0.1, -0.25)), # decrease cost?
     ("land_morale",                 0.1, (0.05, 0.25)),
@@ -93,9 +93,9 @@ bonusData = (
     ("merc_maintenance_modifier",   -0.25, (-0.1, -0.25)),
     ("mercenary_cost",              -0.25, (-0.1, -0.25)),
     ("merchants",                   1, (1, 1)),
-    ("mil_tech_cost_modifier",      -0.1, (-0.05, -0.2)), # Aristocratic only
+    ("mil_tech_cost_modifier",      -0.1, (-0.05, -0.2)),
     ("missionaries",                1, (1, 1)),
-    ("naval_attrition",             -0.25, (-0.1, -0.25)),
+    ("naval_attrition",             -0.25, (-0.1, -0.25)), # few examples
     ("naval_forcelimit_modifier",   0.25, (0.1, 0.5)), # 0.25 or 0.5?
     ("naval_maintenance_modifier",  -0.25, (-0.1, -0.33)), # -0.2), -0.25), or -0.33?
     ("naval_morale",                0.2, (0.1, 0.5)),
@@ -106,7 +106,7 @@ bonusData = (
     ("overseas_income",             0.2, (0.1, 0.3)), #0.1 or 0.2?
     ("papal_influence",             2, (1, 5)), # 2 or 3?
     ("possible_mercenaries",        0.5, (0.25, 1.0)),
-    ("prestige",                    1.0, (0.5, 5.0)),
+    ("prestige",                    2.0, (0.5, 5.0)), # lower cost
     ("prestige_decay",              -0.02, (-0.01, -0.02)),
     ("prestige_from_land",          1.0, (0.5, 1.0)), # Naval only
     ("prestige_from_naval",         1.0, (0.5, 1.0)), # Offensive only
@@ -128,7 +128,7 @@ bonusData = (
     ("tolerance_heathen",           2, (1, 4)),
     ("tolerance_heretic",           2, (1, 4)),
     ("tolerance_own",               2, (1, 4)),
-    ("trade_efficiency",            0.075, (0.05, 0.2)), 
+    ("trade_efficiency",            0.075, (0.05, 0.15)), 
     ("trade_range_modifier",        0.25, (0.1, 0.5)), #0.20 or 0.25?
     ("trade_steering",              0.2, (0.05, 0.5)), # 0.1 to 0.25 ?
     ("transport_cost",              -0.2, (-0.1, -0.33)), # unused
@@ -137,6 +137,8 @@ bonusData = (
     ("war_exhaustion",              -0.02, (-0.01, -0.05)), # Innovative only
     ("war_exhaustion_cost",         -0.2, (-0.1, -0.33)), # -0.1 to -0.2?
     )
+
+bonusTypes, bonusNormalValues, bonusRanges = zip(*bonusData)
 
 nonPercentFloats = set([
     "army_tradition",
@@ -148,24 +150,23 @@ nonPercentFloats = set([
     "prestige",
     ])
 
-redCardForDuplicates = set([
-    "army_tradition_decay",
-    "colonist_time",
-    "core_creation",
-    "discovered_relations_impact",
-    "galley_cost",
-    "global_ship_cost",
-    "heavy_ship_cost",
-    "land_maintenance_modifier",
-    "light_ship_cost",
-    "merc_maintenance_modifier",
-    "naval_maintenance_modifier",
-    "navy_tradition_decay",
-    "prestige_decay",
-    "transport_cost",
+disallowPositiveDuplicates = set([
+    "hostile_attrition",
     ])
 
-bonusTypes, bonusNormalValues, bonusRanges = zip(*bonusData)
+allowNegativeDuplicates = set([
+    "artillery_cost",
+    "cavalry_cost",
+    "global_regiment_cost",
+    "global_revolt_risk",
+    "infantry_cost",
+    "war_exhaustion",
+    ])
+
+def allowDuplicate(bonusType):
+    normalValue = bonusNormalValues[bonusTypes.index(bonusType)]
+    if normalValue > 0: return bonusType not in disallowPositiveDuplicates
+    else: return bonusType in allowNegativeDuplicates
 
 def generateOptions(bonusTypeIndex):
     bonusType, normalValue, valueRange = bonusData[bonusTypeIndex]
