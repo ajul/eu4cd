@@ -1,2 +1,0 @@
-gamepath = "D:\Steam\steamapps\common\Europa Universalis IV"
-modpath = "C:/Users/Albert/Documents/Paradox Interactive/Europa Universalis IV/mod"
