@@ -14,6 +14,9 @@ from PyQt5.QtWidgets import (
     QWidget,
     )
 
+costToolTipText = "Exceeding 11.00 points (Normal) will result in a yellow card. Exceeding 15.00 points (Stronkest) will result in a red card."
+penaltiesToolTipText = "One yellow card is considered within the bounds of vanilla. More than one yellow card or a red card is excessive."
+
 class RatingWidget(QWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -40,7 +43,27 @@ class RatingWidget(QWidget):
         possibleRatings.setLayout(possibleRatingsLayout)
         costLayout.addRow(possibleRatings)
 
+        breakdown = QGroupBox("Breakdown")
+        breakdownLayout = QFormLayout()
+        self.breakdownLabels = []
+        self.breakdownCosts = []
+        for i in range(9):
+            breakdownLabel = QLabel()
+            self.breakdownLabels.append(breakdownLabel)
+            
+            breakdownCost = QLineEdit()
+            breakdownCost.setReadOnly(True)
+            
+            self.breakdownCosts.append(breakdownCost)
+            breakdownLayout.addRow(breakdownLabel, breakdownCost)
+
+        breakdown.setLayout(breakdownLayout)
+
+        costLayout.addRow(breakdown)
+
         self.cost.setLayout(costLayout)
+
+        self.cost.setToolTip(costToolTipText)
 
         # penalty display
         self.penalties = QGroupBox("Penalties")
@@ -72,6 +95,8 @@ class RatingWidget(QWidget):
 
         self.penalties.setLayout(penaltiesLayout)
 
+        self.penalties.setToolTip(penaltiesToolTipText)
+
         layout = QHBoxLayout()
 
         layout.addWidget(self.cost)
@@ -79,9 +104,16 @@ class RatingWidget(QWidget):
 
         self.setLayout(layout)
 
-    def handleCostChanged(self, cost):
-        self.costDisplay.setText("%0.2f" % (cost,))
-        self.costRating.setText(getIdeaRating(cost))
+    def handleCostChanged(self, costs):
+        totalCost = sum(costs)
+        self.costDisplay.setText("%0.2f" % (totalCost,))
+        self.costRating.setText(getIdeaRating(totalCost))
+        for i, cost in enumerate(costs):
+            self.breakdownCosts[i].setText("%0.2f" % cost)
+
+    def handleIdeaNamesChanged(self, names):
+        for i, name in enumerate(names):
+            self.breakdownLabels[i].setText(name)
 
     def handlePenaltiesChanged(self, yellow, red):
         self.yellowCardCount.setText("%d" % (len(yellow),))

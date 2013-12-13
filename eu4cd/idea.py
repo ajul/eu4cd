@@ -31,7 +31,8 @@ from PyQt5.QtWidgets import (
 internalNameValidator = QRegExpValidator(QRegExp("(?!(start|bonus|category|trigger|ai_will_do|important|free)$)[a-zA-Z]\w*"))
 
 class IdeasWidget(QWidget):
-    costChanged = pyqtSignal(float)
+    costChanged = pyqtSignal(list)
+    ideaNamesChanged = pyqtSignal(list)
     
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -45,6 +46,7 @@ class IdeasWidget(QWidget):
         loaderLayout.addWidget(self.ideasSelect)
 
         self.loadButton = QPushButton("Load")
+        self.loadButton.setSizePolicy(QSizePolicy.Fixed, QSizePolicy.Fixed)
         loaderLayout.addWidget(self.loadButton)
 
         self.loader.setLayout(loaderLayout)
@@ -76,6 +78,7 @@ class IdeasWidget(QWidget):
         # signals
         self.loadButton.clicked.connect(self.handleIdeasLoaded)
         self.tabs.costChanged.connect(self.handleCostChanged)
+        self.tabs.nameChanged.connect(self.handleIdeaNamesChanged)
 
     def handleIdeasLoaded(self):
         ideasIndex = self.ideasSelect.currentIndex()
@@ -92,6 +95,9 @@ class IdeasWidget(QWidget):
 
     def getCost(self):
         return self.tabs.getCost()
+
+    def getCosts(self):
+        return self.tabs.getCosts()
 
     def getLocalization(self, tag):
         result = self.tabs.getLocalization(tag, self.getInternalName())
@@ -115,11 +121,15 @@ class IdeasWidget(QWidget):
     def setName(self, name):
         self.name.setText(name)
 
-    def handleCostChanged(self, cost):
-        self.costChanged.emit(cost)
+    def handleCostChanged(self, costs):
+        self.costChanged.emit(costs)
+
+    def handleIdeaNamesChanged(self, names):
+        self.ideaNamesChanged.emit(names)
 
 class IdeasTabWidget(QTabWidget):
-    costChanged = pyqtSignal(float)
+    costChanged = pyqtSignal(list)
+    nameChanged = pyqtSignal(list)
     
     def __init__(self, parent=None):
         super().__init__(parent=parent)
@@ -130,6 +140,7 @@ class IdeasTabWidget(QTabWidget):
         self.addTab(self.traditions, "Traditions")
         self.traditions.setName("Custom Traditions")
         self.traditions.costChanged.connect(self.handleCostChanged)
+        self.traditions.nameChanged.connect(self.handleNameChanged)
         
         for i in range(7):
             idea = Idea()
@@ -138,11 +149,13 @@ class IdeasTabWidget(QTabWidget):
             idea.setInternalName("custom_idea_%d" % (i + 1) )
             idea.setName("Custom Idea %d" % (i + 1) )
             idea.costChanged.connect(self.handleCostChanged)
+            idea.nameChanged.connect(self.handleNameChanged)
 
         self.ambitions = Idea("ambitions")
         self.addTab(self.ambitions, "Ambitions")
         self.ambitions.setName("Custom Ambitions")
         self.ambitions.costChanged.connect(self.handleCostChanged)
+        self.ambitions.nameChanged.connect(self.handleNameChanged)
 
     def reload(self):
         self.traditions.reload()
@@ -175,6 +188,12 @@ class IdeasTabWidget(QTabWidget):
     def getCost(self):
         return sum(idea.getCost() for idea in self.getAllIdeas())
 
+    def getCosts(self):
+        return [idea.getCost() for idea in self.getAllIdeas()]
+
+    def getNames(self):
+        return [idea.getName() for idea in self.getAllIdeas()]
+
     def getNegativeCost(self):
         return sum(idea.getNegativeCost() for idea in self.getAllIdeas())
 
@@ -194,9 +213,9 @@ class IdeasTabWidget(QTabWidget):
         redCards = []
         cost = self.getCost()
         if cost > 15.0:
-            redCards.append("National ideas cost more than 15.0 points.")
+            redCards.append("National ideas cost more than 15.00 points.")
         elif cost > 11.0:
-            yellowCards.append("National ideas cost more than 11.0 points.")
+            yellowCards.append("National ideas cost more than 11.00 points.")
 
         # idea cost limits
         for i, idea in enumerate(self.getAllIdeas()):
@@ -233,11 +252,16 @@ class IdeasTabWidget(QTabWidget):
         yield self.ambitions
 
     def handleCostChanged(self):
-        cost = self.getCost()
-        self.costChanged.emit(cost)
+        costs = self.getCosts()
+        self.costChanged.emit(costs)
+
+    def handleNameChanged(self):
+        names = self.getNames()
+        self.nameChanged.emit(names)
 
 class Idea(QWidget):
     costChanged = pyqtSignal()
+    nameChanged = pyqtSignal()
     
     def __init__(self, ideaType=None, parent=None):
         super().__init__(parent=parent)
@@ -250,6 +274,8 @@ class Idea(QWidget):
 
         self.ideaText = IdeaText(ideaType=ideaType)
         layout.addWidget(self.ideaText)
+
+        self.ideaText.nameChanged.connect(self.handleNameChanged)
         
         self.setLayout(layout)
 
@@ -291,10 +317,15 @@ class Idea(QWidget):
     def handleCostChanged(self):
         self.costChanged.emit()
 
+    def handleNameChanged(self):
+        self.nameChanged.emit()
+
     def isEmpty(self):
         return not any(bonus.getIndex() > 0 for bonus in self.ideaBonuses.bonuses) 
 
 class IdeaText(QGroupBox):
+    nameChanged = pyqtSignal()
+    
     def __init__(self, ideaType=None, parent=None):
         super().__init__("Text", parent=parent)
         layout = QFormLayout()
@@ -317,11 +348,17 @@ class IdeaText(QGroupBox):
         
         self.setLayout(layout)
 
+        # signal
+        self.name.textChanged.connect(self.handleNameChanged)
+
     def setTree(self, bonusKey):
         if bonusKey not in ("start", "bonus"):
             self.internalName.setText(bonusKey + "_custom")
             self.name.setText(pyradox.yml.getLocalization(bonusKey, sources = ["text", "countries", "EU4", "powers_and_ideas"]) or "")
             self.description.setText(pyradox.yml.getLocalization(bonusKey + "_desc", sources = ["text", "countries", "EU4", "powers_and_ideas"]) or "")
+
+    def handleNameChanged(self):
+        self.nameChanged.emit()
         
 
 class IdeaBonuses(QGroupBox):
@@ -344,6 +381,8 @@ class IdeaBonuses(QGroupBox):
         self.setLayout(layout)
 
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+
+        self.setToolTip("Total cost for each idea should be positive and no more than 3.00 (4.00 for traditions). Taking duplicates of some bonuses will result in penalty cards.")
 
     def getTree(self):
         tree = pyradox.struct.Tree()

@@ -1,6 +1,7 @@
 import os
 
 import webbrowser
+import traceback
 
 import eu4cd.gamedata
 import eu4cd.idea
@@ -43,6 +44,7 @@ class MainWindow(QMainWindow):
 
         self.ideas.costChanged.connect(self.handleCostChanged)
         self.ideas.costChanged.connect(self.handlePenaltiesChanged)
+        self.ideas.ideaNamesChanged.connect(self.handleIdeaNamesChanged)
         self.overview.countryLoaded.connect(self.handleCountryLoaded)
         self.overview.penaltiesChanged.connect(self.handlePenaltiesChanged)
         self.overview.adjectiveChanged.connect(self.handleAdjectiveChanged)
@@ -91,7 +93,7 @@ class MainWindow(QMainWindow):
         try:
             self.reload()
         except Exception as e:
-            print(e)
+            print(traceback.format_exc())
             QMessageBox.critical(None, "Load failed!", "Failed to load game data from %s." % (self.gamePath,))
             self.loadConfig(automatic=False)
         else:
@@ -133,6 +135,8 @@ class MainWindow(QMainWindow):
     def createStatusBar(self):
         self.cost = QLabel()
         self.penalties = QLabel()
+        self.cost.setToolTip(eu4cd.rating.costToolTipText)
+        self.penalties.setToolTip(eu4cd.rating.penaltiesToolTipText)
         self.statusBar().addPermanentWidget(self.cost)
         self.statusBar().addPermanentWidget(self.penalties)
 
@@ -140,7 +144,7 @@ class MainWindow(QMainWindow):
         eu4cd.gamedata.readGameData(self.gamePath)
         self.overview.reload()
         self.ideas.reload()
-        self.handleCostChanged(0.0)
+        self.handleCostChanged([0.0] * 9)
         self.handlePenaltiesChanged()
 
     def save(self):
@@ -181,15 +185,19 @@ class MainWindow(QMainWindow):
                                events=events,
                                localization=localization)
         except Exception as e:
-            print(e)
+            print(traceback.format_exc())
             QMessageBox.critical(None, "Save failed!", "Failed to save mod to %s." % (filepath,))
         else:
             self.writeConfig() # successful save, write mod path to config
             self.statusBar().showMessage("Saved mod to %s." % (filepath,), 5000)
 
-    def handleCostChanged(self, cost):
-        self.cost.setText("National ideas cost: %0.2f (%s)" % (cost, eu4cd.rating.getIdeaRating(cost)))
-        self.rating.handleCostChanged(cost)
+    def handleCostChanged(self, costs):
+        totalCost = sum(costs)
+        self.cost.setText("National ideas cost: %0.2f points (%s)" % (totalCost, eu4cd.rating.getIdeaRating(totalCost)))
+        self.rating.handleCostChanged(costs)
+
+    def handleIdeaNamesChanged(self, names):
+        self.rating.handleIdeaNamesChanged(names)
 
     def handlePenaltiesChanged(self):
         yellowOverview, redOverview = self.overview.getPenalties()
