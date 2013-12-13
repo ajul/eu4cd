@@ -34,28 +34,32 @@ class OverviewWidget(QWidget):
         self.adjective = QLineEdit()
         layout.addRow(QLabel("Adjective:"), self.adjective)
 
+
+        technologyGroupToolTipText = "Upgrading starting technology group will give a penalty card."
         technologyGroupLabel = QLabel("Technology group:")
-        technologyGroupLabel.setToolTip("Upgrading starting technology group will give a penalty card.")
+        technologyGroupLabel.setToolTip(technologyGroupToolTipText)
         self.technologyGroupSelect = eu4cd.gamedata.TechnologyGroupSelect()
-        self.technologyGroupSelect.setToolTip("Upgrading starting technology group will give a penalty card.")
+        self.technologyGroupSelect.setToolTip(technologyGroupToolTipText)
         layout.addRow(technologyGroupLabel, self.technologyGroupSelect)
         
         self.religionSelect = eu4cd.gamedata.ReligionSelect()
         layout.addRow(QLabel("Religion:"), self.religionSelect)
 
+        religionConvertToolTipText = "If checked, all provinces will be converted via event at game start."
         religionConvertLabel = QLabel("Convert religion:")
-        religionConvertLabel.setToolTip("If checked, all provinces will be converted via event at game start.")
+        religionConvertLabel.setToolTip(religionConvertToolTipText)
         self.religionConvert = QCheckBox()
-        self.religionConvert.setToolTip("If checked, all provinces will be converted via event at game start.")
+        self.religionConvert.setToolTip(religionConvertToolTipText)
         layout.addRow(religionConvertLabel, self.religionConvert)
 
         self.governmentSelect = eu4cd.gamedata.GovernmentSelect()
         layout.addRow(QLabel("Government:"), self.governmentSelect)
 
+        mercantilismToolTip = "Republics start with higher mercantilism."
         mercantilismLabel = QLabel("Mercantilism:")
-        mercantilismLabel.setToolTip("Republics start with higher mercantilism.")
+        mercantilismLabel.setToolTip(mercantilismToolTip)
         self.mercantilism = QLineEdit()
-        self.mercantilism.setToolTip("Republics start with higher mercantilism.")
+        self.mercantilism.setToolTip(mercantilismToolTip)
         self.mercantilism.setReadOnly(True)
         layout.addRow(mercantilismLabel, self.mercantilism)
         

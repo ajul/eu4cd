@@ -92,9 +92,13 @@ class MainWindow(QMainWindow):
                     self.modPath = ""
         try:
             self.reload()
-        except Exception as e:
+        except IOError as e:
             print(traceback.format_exc())
-            QMessageBox.critical(None, "Load failed!", "Failed to load game data from %s." % (self.gamePath,))
+            QMessageBox.critical(None, "Load failed!", "Could not read game data from %s." % (self.gamePath,))
+            self.loadConfig(automatic=False)
+        except SyntaxError as e:
+            print(traceback.format_exc())
+            QMessageBox.critical(None, "Load failed!", "Syntax error when reading game data from %s." % (self.gamePath,))
             self.loadConfig(automatic=False)
         else:
             self.writeConfig()
