@@ -93,7 +93,7 @@ class RatingWidget(QWidget):
 def getIdeaRating(cost):
     for maxCost, rating in ideaRatings[:-1]:
         if cost <= maxCost: return rating
-    return ideaRatings[-1][0]
+    return ideaRatings[-1][1]
 
 def getPenaltiesRating(yellowCount, redCount):
     if redCount > 0 or yellowCount > 1:

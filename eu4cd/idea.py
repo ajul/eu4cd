@@ -198,12 +198,18 @@ class IdeasTabWidget(QTabWidget):
         elif cost > 11.0:
             yellowCards.append("National ideas cost more than 11.0 points.")
 
-        # empty ideas
-        for idea in self.getAllIdeas():
-            if idea.isEmpty():
-                redCards.append("Idea %s has no bonuses." % (idea.getName(),))
-            elif idea.getCost() <= 0.0:
+        # idea cost limits
+        for i, idea in enumerate(self.getAllIdeas()):
+            cost = idea.getCost()
+            if cost <= 0.0:
                 redCards.append("Idea %s has non-positive cost." % (idea.getName(),))
+
+            if i == 0:
+                if cost > 4.0:
+                    yellowCards.append("Cost of traditions exceeds 4.00.")
+            elif i <= 7:
+                if cost > 3.0:
+                    yellowCards.append("Cost of idea %s exceeds 3.00." % (idea.getName(),))
 
         # duplicate ideas
         bonusTypes = []
