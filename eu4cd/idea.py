@@ -324,11 +324,6 @@ class Idea(QWidget):
             if cost > 3.0:
                 yellowCards.append("Cost of idea %s exceeds 3.00." % (self.getName(),))
 
-        # check traditions and ambitions full
-        if self.ideaType is not None:
-            if any(bonus.getIndex() == 0 for bonus in self.ideaBonuses.bonuses):
-                redCards.append("%s must have filled bonuses." % self.ideaType.title())
-
         return yellowCards, redCards
 
     def handleCostChanged(self):
@@ -338,7 +333,7 @@ class Idea(QWidget):
         self.nameChanged.emit()
 
     def isEmpty(self):
-        return not any(bonus.getIndex() > 0 for bonus in self.ideaBonuses.bonuses) 
+        return not any(bonus.getValue() is not None for bonus in self.ideaBonuses.bonuses) 
 
 class IdeaText(QGroupBox):
     nameChanged = pyqtSignal()
@@ -398,7 +393,7 @@ class IdeaBonuses(QGroupBox):
             self.nBonuses = 3
         
         for i in range(self.nBonuses):
-            ideaBonus = IdeaBonus()
+            ideaBonus = IdeaBonus(allowNone = (ideaType is None))
             ideaBonus.costChanged.connect(self.handleCostChanged)
             self.bonuses.append(ideaBonus)
             layout.addRow(QLabel("Bonus %d:" % (i + 1,)), self.bonuses[i])
@@ -422,12 +417,14 @@ class IdeaBonuses(QGroupBox):
         for i, bonus in enumerate(self.bonuses):
             if len(bonuses) > i:
                 bonusType, bonusValue = bonuses.at(i)
-                if bonusType not in eu4cd.ideaoptions.bonusTypes: continue
-                bonus.bonusTypeSelect.setCurrentIndex(eu4cd.ideaoptions.bonusTypes.index(bonusType))
+                if bonusType not in eu4cd.ideaoptions.bonusTypes: 
+                    print("Unknown bonus type %s." % bonusType)
+                    continue
+                bonus.setBonusTypeIndex(eu4cd.ideaoptions.bonusTypes.index(bonusType))
                 valueIndex = eu4cd.ideaoptions.getClosestValueIndex(bonus.values, bonusValue)
                 bonus.bonusValueSelect.setCurrentIndex(valueIndex)
             else:
-                bonus.bonusTypeSelect.setCurrentIndex(0)
+                bonus.setBonusTypeIndex(0)
 
     def getCost(self):
         return sum(bonus.getCost() for bonus in self.bonuses)
@@ -440,18 +437,24 @@ class IdeaBonuses(QGroupBox):
 
     def getBonusTypes(self):
         for bonus in self.bonuses:
-            if bonus.getIndex() > 0:
+            if bonus.getValue() is not None:
                 yield bonus.getType()
 
 class IdeaBonus(QWidget):
     costChanged = pyqtSignal()
     
-    def __init__(self, parent=None):
+    def __init__(self, allowNone = True, parent=None):
         super().__init__(parent=parent)
+
+        self.allowNone = allowNone
 
         layout = QHBoxLayout()
         self.bonusTypeSelect = QComboBox()
-        self.bonusTypeSelect.addItems(eu4cd.ideaoptions.bonusTypes)
+
+        if allowNone:
+            self.bonusTypeSelect.addItems(eu4cd.ideaoptions.bonusTypes)
+        else:
+            self.bonusTypeSelect.addItems(eu4cd.ideaoptions.bonusTypes[1:])
         layout.addWidget(self.bonusTypeSelect)
 
         self.bonusValueSelect = QComboBox()
@@ -464,18 +467,32 @@ class IdeaBonus(QWidget):
         self.bonusTypeSelect.currentIndexChanged.connect(self.resetBonusValue)
         self.bonusValueSelect.currentIndexChanged.connect(self.handleCostChanged)
 
-    def resetBonusValue(self, index):
+    def resetBonusValue(self, selectIndex):
+        if self.allowNone:
+            index = selectIndex
+        else:
+            index = selectIndex + 1
+        
         options, self.values, self.costs = eu4cd.ideaoptions.generateOptions(index)
         defaultIndex = eu4cd.ideaoptions.getClosestValueIndex(self.values, eu4cd.ideaoptions.bonusNormalValues[index])
         self.bonusValueSelect.clear()
         self.bonusValueSelect.addItems(options)
         self.bonusValueSelect.setCurrentIndex(defaultIndex)
 
-    def getIndex(self):
-        return self.bonusTypeSelect.currentIndex()
+    def getBonusTypeIndex(self):
+        if self.allowNone:
+            return self.bonusTypeSelect.currentIndex()
+        else:
+            return self.bonusTypeSelect.currentIndex() + 1
+
+    def setBonusTypeIndex(self, index):
+        if self.allowNone:
+            self.bonusTypeSelect.setCurrentIndex(index)
+        else:
+            self.bonusTypeSelect.setCurrentIndex(max(index - 1, 0))
 
     def getType(self):
-        return eu4cd.ideaoptions.bonusTypes[self.bonusTypeSelect.currentIndex()]
+        return eu4cd.ideaoptions.bonusTypes[self.getBonusTypeIndex()]
 
     def getValue(self):
         return self.values[self.bonusValueSelect.currentIndex()]
