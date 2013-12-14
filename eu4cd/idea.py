@@ -314,8 +314,8 @@ class Idea(QWidget):
         
         # check exessive cost
         cost = self.getCost()
-        if cost <= 0.0:
-            redCards.append("Idea %s has non-positive cost." % (self.getName(),))
+        if cost < 0.0:
+            redCards.append("Idea %s has negative cost." % (self.getName(),))
 
         if self.ideaType == "traditions":
             if cost > 4.0:
@@ -393,7 +393,7 @@ class IdeaBonuses(QGroupBox):
             self.nBonuses = 3
         
         for i in range(self.nBonuses):
-            ideaBonus = IdeaBonus(allowNone = (ideaType is None))
+            ideaBonus = IdeaBonus(allowNone = (ideaType is None) and i > 0)
             ideaBonus.costChanged.connect(self.handleCostChanged)
             self.bonuses.append(ideaBonus)
             layout.addRow(QLabel("Bonus %d:" % (i + 1,)), self.bonuses[i])
@@ -402,7 +402,7 @@ class IdeaBonuses(QGroupBox):
 
         self.setSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
 
-        self.setToolTip("Total cost for each idea should be positive but not too large. Taking duplicates of some bonuses will result in penalty cards.")
+        self.setToolTip("Total cost for each idea should not be negative or too large. Taking duplicates of some bonuses will result in penalty cards.")
 
     def getTree(self):
         tree = pyradox.struct.Tree()
