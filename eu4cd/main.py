@@ -23,7 +23,7 @@ from PyQt5.QtWidgets import (
     QTabWidget,
     )
 
-version = '0.5'
+version = '1.0'
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -114,7 +114,7 @@ class MainWindow(QMainWindow):
 
     def createMenus(self):
         def openParadoxplaza():
-            webbrowser.open("about:blank") # fill in
+            webbrowser.open("http://forum.paradoxplaza.com/forum/showthread.php?741236-Unofficial-Country-Designer")
             
         def openSourceforge():
             webbrowser.open("https://sourceforge.net/projects/eu4cd/")

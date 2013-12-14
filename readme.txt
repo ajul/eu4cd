@@ -52,7 +52,6 @@ You may also get yellow and red cards for various reasons, including (but not li
 
 * Having a high national idea cost.
 * Upgrading technology group.
-* Starting with extra Mercantilism.
 * Having empty ideas or ideas with negative cost.
 
 Yellow cards represent bending the rules in minor ways, whereas red cards indicate a more major offense, or an ill-formed idea set.
