@@ -136,7 +136,7 @@ class IdeasTabWidget(QTabWidget):
         
         self.ideas = []
 
-        self.traditions = Idea("traditions")
+        self.traditions = Idea(ideaType = "traditions")
         self.addTab(self.traditions, "Traditions")
         self.traditions.setName("Custom Traditions")
         self.traditions.costChanged.connect(self.handleCostChanged)
@@ -151,7 +151,7 @@ class IdeasTabWidget(QTabWidget):
             idea.costChanged.connect(self.handleCostChanged)
             idea.nameChanged.connect(self.handleNameChanged)
 
-        self.ambitions = Idea("ambitions")
+        self.ambitions = Idea(ideaType = "ambitions")
         self.addTab(self.ambitions, "Ambitions")
         self.ambitions.setName("Custom Ambitions")
         self.ambitions.costChanged.connect(self.handleCostChanged)
@@ -218,18 +218,10 @@ class IdeasTabWidget(QTabWidget):
             yellowCards.append("National ideas cost more than 11.00 points.")
 
         # idea cost limits
-        for i, idea in enumerate(self.getAllIdeas()):
-            cost = idea.getCost()
-            if cost <= 0.0:
-                redCards.append("Idea %s has non-positive cost." % (idea.getName(),))
-
-            if i == 0:
-                if cost > 4.0:
-                    yellowCards.append("Cost of traditions exceeds 4.00.")
-            elif i <= 6:
-                # no restriction on last idea
-                if cost > 3.0:
-                    yellowCards.append("Cost of idea %s exceeds 3.00." % (idea.getName(),))
+        for idea in self.getAllIdeas():
+            y, r = idea.getPenalties()
+            yellowCards += y
+            redCards += r
 
         # duplicate ideas
         bonusTypes = []
@@ -266,10 +258,12 @@ class Idea(QWidget):
     
     def __init__(self, ideaType=None, parent=None):
         super().__init__(parent=parent)
+
+        self.ideaType = ideaType
         
         layout = QVBoxLayout()
 
-        self.ideaBonuses = IdeaBonuses()
+        self.ideaBonuses = IdeaBonuses(ideaType = ideaType)
         layout.addWidget(self.ideaBonuses)
         self.ideaBonuses.costChanged.connect(self.handleCostChanged)
 
@@ -314,6 +308,28 @@ class Idea(QWidget):
 
     def getNegativeCost(self):
         return self.ideaBonuses.getNegativeCost()
+
+    def getPenalties(self):
+        yellowCards, redCards = [], []
+        
+        # check exessive cost
+        cost = self.getCost()
+        if cost <= 0.0:
+            redCards.append("Idea %s has non-positive cost." % (self.getName(),))
+
+        if self.ideaType == "traditions":
+            if cost > 4.0:
+                yellowCards.append("Cost of traditions exceeds 4.00.")
+        elif self.ideaType is None:
+            if cost > 3.0:
+                yellowCards.append("Cost of idea %s exceeds 3.00." % (self.getName(),))
+
+        # check traditions and ambitions full
+        if self.ideaType is not None:
+            if any(bonus.getIndex() == 0 for bonus in self.ideaBonuses.bonuses):
+                redCards.append("%s must have filled bonuses." % self.ideaType.title())
+
+        return yellowCards, redCards
 
     def handleCostChanged(self):
         self.costChanged.emit()
@@ -364,15 +380,23 @@ class IdeaText(QGroupBox):
 
 class IdeaBonuses(QGroupBox):
     costChanged = pyqtSignal()
-
-    nBonuses = 3
     
-    def __init__(self, parent=None):
+    def __init__(self, ideaType = None, parent=None):
         super().__init__("Bonuses", parent=parent)
+
+        self.ideaType = ideaType
 
         layout = QFormLayout()
 
         self.bonuses = []
+
+        if ideaType == "traditions":
+            self.nBonuses = 2
+        elif ideaType == "ambitions":
+            self.nBonuses = 1
+        else:
+            self.nBonuses = 3
+        
         for i in range(self.nBonuses):
             ideaBonus = IdeaBonus()
             ideaBonus.costChanged.connect(self.handleCostChanged)
