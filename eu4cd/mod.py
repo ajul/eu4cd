@@ -35,7 +35,7 @@ def writeMod(filepath, tag, countryBasename, countryData, ideas, events, localiz
 
         localization = { 'l_english' : localization }
 
-        f = open(os.path.join(localizationPath, '%s_%s_l_english.yml' % (root, tag)), 'w')
+        f = open(os.path.join(localizationPath, '%s_%s_l_english.yml' % (root, tag)), 'w', encoding='utf-8-sig')
         yaml.dump(localization, f, default_flow_style=False, default_style='"')
         f.close()
 

@@ -6,7 +6,7 @@ www.paradoxplaza.com
 
 == Pyradox and Europa Universalis IV Country Designer ==
 
-Any parts of this work not otherwise copyright is licensed as follows:
+Any part of this work not otherwise copyright is licensed as follows:
 
 The MIT License (MIT)
 

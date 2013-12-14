@@ -121,7 +121,7 @@ class MainWindow(QMainWindow):
         
         self.menuFile = self.menuBar().addMenu("&File")
         self.menuFile.addAction(QAction("L&oad game data", self, shortcut="Ctrl+O", statusTip="Load game data", triggered=lambda: self.loadConfig(optional=True)))
-        self.menuFile.addAction(QAction("&Save mod", self, shortcut="Ctrl+S", statusTip="Save mod", triggered=self.save))
+        self.menuFile.addAction(QAction("&Save mod", self, shortcut="Ctrl+S", statusTip="Save country to mod", triggered=self.save))
         self.menuFile.addSeparator()
         self.menuFile.addAction(QAction("E&xit", self, shortcut="Ctrl+Q", statusTip="Exit the application", triggered=self.close))
 
