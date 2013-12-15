@@ -94,11 +94,15 @@ class MainWindow(QMainWindow):
             self.reload()
         except IOError as e:
             print(traceback.format_exc())
-            QMessageBox.critical(None, "Load failed!", "Could not read game data from %s: %s" % (self.gamePath, e))
+            QMessageBox.critical(None, "Load failed!", "Could not read game data from %s: %s" % (self.gamePath, traceback.format_exc()))
             self.loadConfig(automatic=False)
         except pyradox.txt.ParseError as e:
             print(traceback.format_exc())
-            QMessageBox.critical(None, "Load failed!", "Syntax error when reading game data from %s:\n%s" % (self.gamePath, e))
+            QMessageBox.critical(None, "Load failed!", "Syntax error when reading game data from %s:\n%s" % (self.gamePath, traceback.format_exc()))
+            self.loadConfig(automatic=False)
+        except Exception as e:
+            print(traceback.format_exc())
+            QMessageBox.critical(None, "Load failed!", "Internal error when reading game data from %s:\n%s" % (self.gamePath, traceback.format_exc()))
             self.loadConfig(automatic=False)
         else:
             self.writeConfig()
@@ -156,6 +160,8 @@ class MainWindow(QMainWindow):
         
         if not filepath: return
 
+        self.statusBar().showMessage("Saving...")
+
         self.modPath, _ = os.path.split(filepath)
 
         ideas = pyradox.struct.Tree()
@@ -182,6 +188,7 @@ class MainWindow(QMainWindow):
 
         try:
             eu4cd.mod.writeMod(filepath,
+                               gamepath = self.gamePath,
                                tag = self.overview.tag,
                                countryBasename = self.overview.getFileBasename(),
                                countryData = self.overview.getTree(),
@@ -190,7 +197,12 @@ class MainWindow(QMainWindow):
                                localization=localization)
         except IOError as e:
             print(traceback.format_exc())
-            QMessageBox.critical(None, "Save failed!", "Could not save mod to %s:\n%s" % (filepath, e))
+            QMessageBox.critical(None, "Save failed!", "Could not save mod to %s:\n%s" % (filepath, traceback.format_exc()))
+            self.statusBar().showMessage("")
+        except Exception as e:
+            print(traceback.format_exc())
+            QMessageBox.critical(None, "Save failed!", "Internal error when saving mod to %s:\n%s" % (self.gamePath, traceback.format_exc()))
+            self.statusBar().showMessage("")
         else:
             self.writeConfig() # successful save, write mod path to config
             self.statusBar().showMessage("Saved mod to %s." % (filepath,), 5000)

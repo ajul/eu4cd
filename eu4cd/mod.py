@@ -1,11 +1,13 @@
 import os
 import yaml
 
+import eu4cd.gamedata
 import pyradox.txt
 
-def writeMod(filepath, tag, countryBasename, countryData, ideas, events, localization):
+def writeMod(filepath, gamepath, tag, countryBasename, countryData, ideas, events, localization):
     basedir, basename = os.path.split(filepath)
     root, ext = os.path.splitext(basename)
+    moddir = os.path.join(basedir, root)
     
     # create mod file if not already existing
     if not os.path.exists(filepath):
@@ -17,27 +19,23 @@ def writeMod(filepath, tag, countryBasename, countryData, ideas, events, localiz
         f.close()
 
     # write ideas
-    if ideas is not None:
-        overwriteFile(os.path.join(basedir, root, 'common', 'ideas', '00_00_%s_%s_ideas.txt' % (root, tag)), str(ideas))
+    overwriteFile(os.path.join(moddir, 'common', 'ideas', '00_00_%s_%s_ideas.txt' % (root, tag)), str(ideas))
 
     # write events
-    if events is not None:
-        overwriteFile(os.path.join(basedir, root, 'events', '%s_%s_events.txt' % (root, tag)), str(events))
+    overwriteFile(os.path.join(moddir, 'events', '%s_%s_events.txt' % (root, tag)), str(events))
 
     # write countries
-    if countryData is not None:
-        overwriteFile(os.path.join(basedir, root, 'history', 'countries', countryBasename), str(countryData))
+    overwriteFile(os.path.join(moddir, 'history', 'countries', countryBasename), str(countryData))
 
     # write localization
-    if localization is not None:
-        localizationPath = os.path.join(basedir, root, 'localisation')
-        os.makedirs(localizationPath, exist_ok=True)
+    localizationPath = os.path.join(moddir, 'localisation')
+    os.makedirs(localizationPath, exist_ok=True)
 
-        localization = { 'l_english' : localization }
+    defaultSource = '%s_%s' % (root, tag)
 
-        f = open(os.path.join(localizationPath, '%s_%s_l_english.yml' % (root, tag)), 'w', encoding='utf-8-sig')
-        yaml.dump(localization, f, default_flow_style=False, default_style='"')
-        f.close()
+    mergedLocalizations = pyradox.yml.mergeLocalizations(localization, defaultSource, basedirs = [moddir, gamepath], sources = [defaultSource, 'countries', 'text'])
+
+    pyradox.yml.writeLocalizations(mergedLocalizations, os.path.join(basedir, root))
 
 def overwriteFile(filepath, data):
     basedir, basename = os.path.split(filepath)
