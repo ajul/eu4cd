@@ -19,7 +19,7 @@ def writeMod(filepath, gamepath, tag, countryBasename, countryData, ideas, event
         f.close()
 
     # write ideas
-    overwriteFile(os.path.join(moddir, 'common', 'ideas', '00_00_%s_%s_ideas.txt' % (root, tag)), str(ideas))
+    overwriteFile(os.path.join(moddir, 'common', 'ideas', '00_c_%s_%s_ideas.txt' % (root, tag)), str(ideas))
 
     # write events
     overwriteFile(os.path.join(moddir, 'events', '%s_%s_events.txt' % (root, tag)), str(events))
