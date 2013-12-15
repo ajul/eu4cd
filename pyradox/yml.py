@@ -30,7 +30,7 @@ def getLocalization(key, sources = ['text'], game = pyradox.config.defaultGame):
 def getLocalizationDesc(key, sources = ['text']):
     return getLocalization('%s_desc' % key, sources)
     
-def mergeLocalizations(localization, defaultSource, basedirs = [pyradox.config.defaultBasedir], sources = ['text']):
+def mergeLocalizations(localization, defaultSource, basedirs = [pyradox.config.defaultBasedir], sources = ['text'], omitUnmodified = True):
     # merges localization and basedirs * sources where localization and basedirs are in descending order of priority
     # as are sources, with localization and basedirs having higher priority
 
@@ -41,6 +41,7 @@ def mergeLocalizations(localization, defaultSource, basedirs = [pyradox.config.d
     # you may want to include defaultSource as the first element of sources
     
     # returns dict of form result['sourcename']['key'] = 'value'
+    # unmodified sources may be omitted
 
     # initialize result with source dicts
     
@@ -68,16 +69,26 @@ def mergeLocalizations(localization, defaultSource, basedirs = [pyradox.config.d
             result[source].update(data['l_english'])
 
     # update with new data
+    modifiedSources = set()
+    modifiedSources.add(defaultSource)
+    
     for key, value in localization.items():
         for source in reversed(sources):
             if key in result[source]:
                 result[source][key] = value
+                modifiedSources.add(source)
                 break
         else:
             # fallback to default
             result[defaultSource][key] = value
 
-    return result
+    if not omitUnmodified: return result
+
+    finalResult = {}
+    for source in modifiedSources:
+        finalResult[source] = result[source]
+
+    return finalResult
 
 def writeLocalizations(localizations, basedir):
     # writes localizations to basedir

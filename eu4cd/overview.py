@@ -34,6 +34,12 @@ class OverviewWidget(QWidget):
         self.adjective = QLineEdit()
         layout.addRow(QLabel("Adjective:"), self.adjective)
 
+        writeCountryNameToolTipText = "Will change country name and adjective only if checked (slow save, does not work well with other mods)."
+        writeCountryNameLabel = QLabel("Change name/adjective:")
+        writeCountryNameLabel.setToolTip(writeCountryNameToolTipText)
+        self.writeCountryName = QCheckBox()
+        self.writeCountryName.setToolTip(writeCountryNameToolTipText)
+        layout.addRow(writeCountryNameLabel, self.writeCountryName)
 
         technologyGroupToolTipText = "Upgrading starting technology group will give a penalty card."
         technologyGroupLabel = QLabel("Technology group:")
@@ -93,10 +99,13 @@ class OverviewWidget(QWidget):
         self.countryLoaded.emit()
 
     def getLocalization(self):
-        return {
-            self.tag : self.name.text(),
-            self.tag + "_ADJ" : self.adjective.text(),
-            }
+        if self.writeCountryName.isChecked():
+            return {
+                self.tag : self.name.text(),
+                self.tag + "_ADJ" : self.adjective.text(),
+                }
+        else:
+            return {}
 
     def getFileBasename(self):
         _, basename = os.path.split(eu4cd.gamedata.tagFiles[self.tagSelect.currentIndex()])

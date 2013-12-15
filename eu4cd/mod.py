@@ -33,8 +33,14 @@ def writeMod(filepath, gamepath, tag, countryBasename, countryData, ideas, event
 
     defaultSource = '%s_%s' % (root, tag)
 
-    mergedLocalizations = pyradox.yml.mergeLocalizations(localization, defaultSource, basedirs = [moddir, gamepath], sources = [defaultSource, 'countries', 'text'])
-
+    if tag in localization:
+        basedirs = [moddir, gamepath]
+        sources = [defaultSource, 'countries', 'text']
+    else:
+        basedirs = [moddir]
+        sources = [defaultSource]
+        
+    mergedLocalizations = pyradox.yml.mergeLocalizations(localization, defaultSource, basedirs = basedirs, sources = sources)
     pyradox.yml.writeLocalizations(mergedLocalizations, os.path.join(basedir, root))
 
 def overwriteFile(filepath, data):
