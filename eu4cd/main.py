@@ -60,6 +60,8 @@ class MainWindow(QMainWindow):
         except:
             config = pyradox.struct.Tree()
 
+        
+
         if optional:
             gamePath = QFileDialog.getExistingDirectory(caption = "Select Europa Universalis IV directory", directory = self.gamePath)
             if gamePath == "":
@@ -67,9 +69,12 @@ class MainWindow(QMainWindow):
             else:
                 self.gamePath = gamePath
         else:
+            homeDir = os.path.expanduser("~")
+            
             gamePathSearch = (
                 r'C:\Steam\steamapps\common\Europa Universalis IV',
                 r'D:\Steam\steamapps\common\Europa Universalis IV',
+                os.path.join(homedir, 'Library', 'Application Support', 'Steam', 'SteamApps', 'common', 'Europa Universalis IV'), # mac
                 )
 
             self.gamePath = ""
@@ -86,7 +91,7 @@ class MainWindow(QMainWindow):
             if 'modpath' in config and os.path.exists(config['modpath']):
                 self.modPath = config['modpath']
             else:
-                homeDir = os.path.expanduser("~")
+                
                 self.modPath = os.path.join(homeDir, "Documents", "Paradox Interactive", "Europa Universalis IV", "mod")
                 if not os.path.exists(self.modPath):
                     self.modPath = ""
