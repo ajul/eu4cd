@@ -69,7 +69,7 @@ class MainWindow(QMainWindow):
             else:
                 self.gamePath = gamePath
         else:
-            homeDir = os.path.expanduser("~")
+            homedir = os.path.expanduser("~")
             
             gamePathSearch = (
                 r'C:\Steam\steamapps\common\Europa Universalis IV',
@@ -92,7 +92,7 @@ class MainWindow(QMainWindow):
                 self.modPath = config['modpath']
             else:
                 
-                self.modPath = os.path.join(homeDir, "Documents", "Paradox Interactive", "Europa Universalis IV", "mod")
+                self.modPath = os.path.join(homedir, "Documents", "Paradox Interactive", "Europa Universalis IV", "mod")
                 if not os.path.exists(self.modPath):
                     self.modPath = ""
         try:
