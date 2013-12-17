@@ -4,7 +4,7 @@
 
 Download the zip and extract it. Then run eu4cd.exe.
 
-Currently 64-bit Windows only. I'm using cx_Freeze to convert the Python program to a binary. However, this only generates binaries for the system it's run on, namely, mine is 64-bit Windows. If you are running a different system you'll have to run it from Python directly, or get somebody with the same system as you to generate a binary for you by running freeze.py.
+Currently I only have a binary for 64-bit Windows; other platforms will need to use the Python source. I'm using cx_Freeze to convert the Python program to a binary. However, this only generates binaries for the system it's run on, namely, mine is 64-bit Windows. If you are running a different system you'll have to run it from Python directly, or get somebody with the same system as you to generate a binary for you by running freeze.py.
 
 === Python version ===
 
