@@ -223,7 +223,7 @@ class IdeasTabWidget(QTabWidget):
             yellowCards += y
             redCards += r
 
-        # duplicate ideas
+        # duplicate bonuses
         bonusTypes = []
         for idea in self.getAllIdeas():
             bonusTypes += list(idea.ideaBonuses.getBonusTypes())
@@ -323,6 +323,15 @@ class Idea(QWidget):
         elif self.ideaType is None:
             if cost > 3.0:
                 yellowCards.append("Cost of idea %s exceeds 3.00." % (self.getName(),))
+
+
+        # duplicate bonuses in same idea
+
+        bonusTypes = list(self.ideaBonuses.getBonusTypes())
+
+        for i, bonusType in enumerate(bonusTypes):
+            if bonusType in bonusTypes[i+1:]:
+                redCards.append("Idea %s has duplicate bonuses in %s." % (self.getName(), bonusType,))
 
         return yellowCards, redCards
 
