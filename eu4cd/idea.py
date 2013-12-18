@@ -400,9 +400,14 @@ class IdeaBonuses(QGroupBox):
             self.nBonuses = 1
         else:
             self.nBonuses = 3
-        
+
         for i in range(self.nBonuses):
-            ideaBonus = IdeaBonus(allowNone = (ideaType is None) and i > 0)
+            allowNone = (ideaType is None) and i > 0
+            if allowNone:
+                initialIndex = 0
+            else:
+                initialIndex = i + 1
+            ideaBonus = IdeaBonus(initialIndex = initialIndex, allowNone = allowNone)
             ideaBonus.costChanged.connect(self.handleCostChanged)
             self.bonuses.append(ideaBonus)
             layout.addRow(QLabel("Bonus %d:" % (i + 1,)), self.bonuses[i])
@@ -452,7 +457,7 @@ class IdeaBonuses(QGroupBox):
 class IdeaBonus(QWidget):
     costChanged = pyqtSignal()
     
-    def __init__(self, allowNone = True, parent=None):
+    def __init__(self, initialIndex = 0, allowNone = True, parent=None):
         super().__init__(parent=parent)
 
         self.allowNone = allowNone
@@ -471,10 +476,11 @@ class IdeaBonus(QWidget):
         layout.addWidget(self.bonusValueSelect)
         self.setLayout(layout)
 
-        self.resetBonusValue(0)
-
         self.bonusTypeSelect.currentIndexChanged.connect(self.resetBonusValue)
         self.bonusValueSelect.currentIndexChanged.connect(self.handleCostChanged)
+
+        self.resetBonusValue(0)
+        self.setBonusTypeIndex(initialIndex)
 
     def resetBonusValue(self, selectIndex):
         if self.allowNone:
