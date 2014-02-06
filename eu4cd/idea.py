@@ -375,8 +375,8 @@ class IdeaText(QGroupBox):
     def setTree(self, bonusKey):
         if bonusKey not in ("start", "bonus"):
             self.internalName.setText(bonusKey + "_custom")
-            self.name.setText(pyradox.yml.getLocalization(bonusKey, sources = ["text", "countries", "EU4", "powers_and_ideas"]) or "")
-            self.description.setText(pyradox.yml.getLocalization(bonusKey + "_desc", sources = ["text", "countries", "EU4", "powers_and_ideas"]) or "")
+            self.name.setText(pyradox.yml.getLocalization(bonusKey, sources = eu4cd.gamedata.localizationSources) or "")
+            self.description.setText(pyradox.yml.getLocalization(bonusKey + "_desc", sources = eu4cd.gamedata.localizationSources) or "")
 
     def handleNameChanged(self):
         self.nameChanged.emit()
@@ -479,6 +479,7 @@ class IdeaBonus(QWidget):
         self.bonusTypeSelect.currentIndexChanged.connect(self.resetBonusValue)
         self.bonusValueSelect.currentIndexChanged.connect(self.handleCostChanged)
 
+        # TODO: clean this up
         self.resetBonusValue(0)
         self.setBonusTypeIndex(initialIndex)
 

@@ -35,7 +35,7 @@ def writeMod(filepath, gamepath, tag, countryBasename, countryData, ideas, event
 
     if tag in localization:
         basedirs = [moddir, gamepath]
-        sources = [defaultSource, 'countries', 'text']
+        sources = [defaultSource] + eu4cd.gamedata.localizationSources
     else:
         basedirs = [moddir]
         sources = [defaultSource]

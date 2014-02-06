@@ -23,7 +23,7 @@ from PyQt5.QtWidgets import (
     QTabWidget,
     )
 
-version = '1.2'
+version = '1.3'
 
 class MainWindow(QMainWindow):
     def __init__(self):

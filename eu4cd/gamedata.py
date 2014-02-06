@@ -8,6 +8,8 @@ from PyQt5.QtWidgets import (
     QComboBox,
     )
 
+localizationSources = ["text", "countries", "EU4", "nw2", "powers_and_ideas"]
+
 tags = []
 tagFiles = []
 tagNames = []
@@ -51,10 +53,10 @@ def readGameData(gamePath):
             tags.append(tag)
             tagFiles.append(fullpath)
 
-            name = pyradox.yml.getLocalization(tag, sources = ["text", "countries", "EU4"]) or ""
+            name = pyradox.yml.getLocalization(tag, sources = localizationSources) or ""
             tagSelects.append("%s - %s" % (tag, name))
             tagNames.append(name)
-            tagAdjectives.append(pyradox.yml.getLocalization(tag + "_ADJ", sources = ["text", "countries", "EU4"]) or "")
+            tagAdjectives.append(pyradox.yml.getLocalization(tag + "_ADJ", sources = localizationSources) or "")
 
     # tech groups
     techData = pyradox.txt.parseFile(os.path.join(gamePath, "common", "technology.txt"))
@@ -98,7 +100,7 @@ def readGameData(gamePath):
     ideaTrees = []
     for key, data in ideasData.items():
         if "free" not in data: continue # national ideas only
-        name = pyradox.yml.getLocalization(key, sources = ["text", "countries", "EU4", "powers_and_ideas"]) or ""
+        name = pyradox.yml.getLocalization(key, sources = localizationSources) or ""
         
         ideas.append(key)
         ideaSelects.append("%s - %s" % (key, name))
