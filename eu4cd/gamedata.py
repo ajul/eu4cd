@@ -17,6 +17,7 @@ tagSelects = []
 tagAdjectives = []
 technologyGroups = []
 technologyPowers = []
+technologyModifiers = []
 religions = []
 governments = []
 governmentMercantilisms = []
@@ -27,7 +28,7 @@ ideaTrees = []
 
 def readGameData(gamePath):
     global tags, tagFiles, tagNames, tagSelects, tagAdjectives
-    global technologyGroups, technologyPowers
+    global technologyGroups, technologyPowers, technologyModifiers
     global religions, governments, governmentMercantilisms
     global ideas, ideaSelects, ideaTrees
 
@@ -62,12 +63,15 @@ def readGameData(gamePath):
     techData = pyradox.txt.parseFile(os.path.join(gamePath, "common", "technology.txt"))
     technologyGroups = []
     technologyPowers = []
+    technologyModifiers = []
+    
     for technologyGroup, data in techData["groups"].items():
         technologyGroups.append(technologyGroup)
         if "power" in data:
             technologyPowers.append(data["power"])
         else:
             technologyPowers.append(0)
+        technologyModifiers.append(data["modifier"])
 
     # religions
     

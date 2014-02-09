@@ -136,13 +136,12 @@ class OverviewWidget(QWidget):
         
         # tech group changed?
         technologyGroup = self.technologyGroupSelect.currentIndex()
+        # assume ordered from best to worst
         if technologyGroup < self.defaultTechnologyGroup:
-            if technologyGroup != 0:
-                yellowCards.append("Upgraded technology group to non-Western.")
-            elif eu4cd.gamedata.technologyPowers[self.defaultTechnologyGroup] >= eu4cd.gamedata.technologyPowers[0]:
-                yellowCards.append("Upgraded technology group to Western from same power.")
+            if eu4cd.gamedata.technologyModifiers[technologyGroup] < eu4cd.gamedata.technologyModifiers[self.defaultTechnologyGroup] - 0.49:
+                redCards.append("Upgraded technology group by 50% or more.")
             else:
-                redCards.append("Upgraded technology group to Western from lower power.")
+                yellowCards.append("Upgraded technology group by less than 50%.")
 
         return yellowCards, redCards
 
