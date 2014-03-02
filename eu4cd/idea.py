@@ -31,6 +31,9 @@ from PyQt5.QtWidgets import (
 internalNameValidator = QRegExpValidator(QRegExp("(?!(start|bonus|category|trigger|ai_will_do|important|free)$)[a-zA-Z]\w*"))
 
 class IdeasWidget(QWidget):
+    """
+    Widget for selecting national ideas.
+    """
     costChanged = pyqtSignal(list)
     ideaNamesChanged = pyqtSignal(list)
     
@@ -128,6 +131,9 @@ class IdeasWidget(QWidget):
         self.ideaNamesChanged.emit(names)
 
 class IdeasTabWidget(QTabWidget):
+    """
+    Set of tabs, one for each idea.
+    """
     costChanged = pyqtSignal(list)
     nameChanged = pyqtSignal(list)
     

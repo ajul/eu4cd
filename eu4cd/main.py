@@ -1,3 +1,5 @@
+
+
 import os
 
 import webbrowser
@@ -23,9 +25,12 @@ from PyQt5.QtWidgets import (
     QTabWidget,
     )
 
-version = '1.4'
+version = '1.3.1'
 
 class MainWindow(QMainWindow):
+    """
+    Contains all other widgets.
+    """
     def __init__(self):
         super().__init__()
         
@@ -59,8 +64,6 @@ class MainWindow(QMainWindow):
             config = pyradox.txt.parseFile('config.txt')
         except:
             config = pyradox.struct.Tree()
-
-        
 
         if optional:
             gamePath = QFileDialog.getExistingDirectory(caption = "Select Europa Universalis IV directory", directory = self.gamePath)
@@ -170,9 +173,9 @@ class MainWindow(QMainWindow):
         self.modPath, _ = os.path.split(filepath)
 
         ideas = pyradox.struct.Tree()
-
         ideas[self.ideas.getInternalName()] = self.ideas.getTree(self.overview.tag)
-        
+
+        # load prefabricated religion conversion file and fill in the blanks
         events = pyradox.txt.parseFile(os.path.join('eu4cd', 'txt', 'convert_provinces.txt'))
         events["namespace"] = "eu4cd_%s_events" % (self.overview.tag,)
         events["country_event"]["id"] = "eu4cd_%s_events.1" % (self.overview.tag,)
@@ -186,7 +189,6 @@ class MainWindow(QMainWindow):
             "eu4cd_convert_provinces_event_title" : "The One True Faith",
             "eu4cd_convert_provinces_event_desc" : "Our glorious nation of $COUNTRY$ follows the One True Faith of $COUNTRY_RELIGION$.",
             "eu4cd_convert_provinces_event_option" : "Excellent",
-            
             }
         localization.update(self.ideas.getLocalization(self.overview.tag))
         localization.update(self.overview.getLocalization())

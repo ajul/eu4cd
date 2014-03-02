@@ -1,3 +1,4 @@
+# allowable values
 intValues = (
     1, 2, 3, 4, 5, 6, 8, 10, 12, 15, 20, 25, 30, 33, 40, 50, 60, 75, 100, 150, 200,
     )
@@ -10,6 +11,7 @@ floatValues = (
     )
 
 # comments refer to normal value
+# tuples are (bonus type, normal value (cost = 1), (minimum value, maximum value))
 bonusData = (
     ("(none)",                      1, (None, None)), # special
     ("adm_tech_cost_modifier",      -0.1, (-0.05, -0.25)), # unused
@@ -166,11 +168,17 @@ allowNegativeDuplicates = set([
     ])
 
 def allowDuplicate(bonusType):
+    """
+    Penalty for duplicating?
+    """
     normalValue = bonusNormalValues[bonusTypes.index(bonusType)]
     if normalValue > 0: return bonusType not in disallowPositiveDuplicates
     else: return bonusType in allowNegativeDuplicates
 
 def generateOptions(bonusTypeIndex):
+    """
+    Generates options, values, costs for a particular bonus type.
+    """
     bonusType, normalValue, valueRange = bonusData[bonusTypeIndex]
 
     if normalValue > 0:
@@ -241,6 +249,9 @@ def generateOptions(bonusTypeIndex):
     return options, values, costs
 
 def getClosestValueIndex(values, target):
+    """
+    Get the index of the closest value to the target.
+    """
     if values[0] is True or values[0] is None: return 0
     
     difference = abs(values[0] - target)

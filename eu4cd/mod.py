@@ -5,6 +5,9 @@ import eu4cd.gamedata
 import pyradox.txt
 
 def writeMod(filepath, gamepath, tag, countryBasename, countryData, ideas, events, localization):
+    """
+    Writes the mod to a file.
+    """
     basedir, basename = os.path.split(filepath)
     root, ext = os.path.splitext(basename)
     moddir = os.path.join(basedir, root)

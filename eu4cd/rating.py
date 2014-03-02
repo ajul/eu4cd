@@ -18,6 +18,9 @@ costToolTipText = "Exceeding 11.00 points (Normal) will result in a yellow card.
 penaltiesToolTipText = "One yellow card is considered within the bounds of vanilla. More than one yellow card or a red card is excessive."
 
 class RatingWidget(QWidget):
+    """
+    Last panel. Gives point cost of idea set and lists any penalty flags.
+    """
     def __init__(self, parent=None):
         super().__init__(parent=parent)
 
@@ -121,7 +124,16 @@ class RatingWidget(QWidget):
         self.redCardCount.setText("%d" % (len(red),))
         self.redCards.setStringList(red)
         # self.penaltiesRating.setText(getPenaltiesRating(len(yellow), len(red)))
-    
+
+ideaRatings = (
+    (7.0, "Cannot into relevant"),
+    (9.0, "Cannot into stronk"),
+    (11.0, "Normal"),
+    (13.0, "Stronk"),
+    (15.0, "Stronkest"),
+    (None, "Überstronk"),
+    )
+
 def getIdeaRating(cost):
     for maxCost, rating in ideaRatings[:-1]:
         if cost <= maxCost: return rating
@@ -135,11 +147,4 @@ def getPenaltiesRating(yellowCount, redCount):
     else:
         return "Green"
 
-ideaRatings = (
-    (7.0, "Cannot into relevant"),
-    (9.0, "Cannot into stronk"),
-    (11.0, "Normal"),
-    (13.0, "Stronk"),
-    (15.0, "Stronkest"),
-    (None, "Überstronk"),
-    )
+

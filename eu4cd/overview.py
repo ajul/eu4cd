@@ -16,6 +16,9 @@ from PyQt5.QtWidgets import (
     )
 
 class OverviewWidget(QWidget):
+    """
+    First panel. Basic country options.
+    """
     countryLoaded = pyqtSignal()
     penaltiesChanged = pyqtSignal()
     adjectiveChanged = pyqtSignal(str)
