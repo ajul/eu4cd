@@ -38,10 +38,11 @@ bonusData = (
     ("diplomatic_reputation",       2, (1, 5)),
     ("diplomatic_upkeep",           2, (1, 3)),
     ("diplomats",                   1, (1, 1)),
-    ("discipline",                  0.1, (0.05, 0.2)),
+    ("discipline",                  0.05, (0.02, 0.1)),
     ("discovered_relations_impact", -0.25, (-0.1, -0.25)),
     ("embargo_efficiency",          1/3, (0.1, 0.33)),
     ("enemy_core_creation",         1.0, (0.5, 1.0)),
+    ("envoy_travel_time",           -0.5, (-0.1, -0.25)),
     ("extra_manpower_at_religious_war", 2.0, (True, True)), # bool
     ("fabricate_claims_time",       -0.25, (-0.1, -0.25)),
     ("free_leader_pool",            1, (1, 1)),
@@ -62,6 +63,7 @@ bonusData = (
     ("global_spy_defence",          0.25, (0.05, 0.5)),
     ("global_tariffs",              0.2, (0.05, 0.2)),
     ("global_tax_modifier",         0.1, (0.05, 0.2)),
+    ("global_trade_goods_size",     0.1, (0.05, 0.2)),
     ("global_trade_income_modifier", 0.1, (0.05, 0.2)),
     ("global_trade_power",          0.1, (0.05, 0.2)),
     ("heavy_ship_cost",             -0.2, (-0.1, -0.33)), # unused
@@ -76,15 +78,18 @@ bonusData = (
     ("inflation_action_cost",       -0.15, (-0.05, -0.25)),
     ("inflation_reduction",         0.15, (0.05, 0.2)), #split between 0.1 and 0.05
     ("interest",                    -1.0, (-0.5, -1)),
+    ("justify_trade_conflict_time", -0.2, (-0.05, -0.2)),
     ("land_attrition",              -0.1, (-0.05, -0.25)),
     ("land_forcelimit_modifier",    0.25, (0.1, 0.5)), # few examples
     ("land_maintenance_modifier",   -0.2, (-0.1, -0.25)), # decrease cost?
     ("land_morale",                 0.1, (0.05, 0.25)),
-    ("leader_fire",                 1, (1, 1)), 
+    ("leader_land_fire",            1, (1, 1)),
+    ("leader_land_shock",           1, (1, 1)),
     ("leader_land_manuever",        1, (1, 1)),
+    ("leader_naval_fire",           2, (1, 1)),
+    ("leader_naval_shock",          2, (1, 1)),
     ("leader_naval_manuever",       2, (1, 2)),
-    ("leader_shock",                1, (1, 1)), 
-    ("leader_siege",                1, (1, 1)), 
+    ("leader_siege",                2/3, (1, 1)), # cost adjusted upwards
     ("legitimacy",                  1.0, (0.25, 1.0)),
     ("light_ship_cost",             -0.2, (-0.1, -0.33)),
     ("light_ship_power",            0.1, (0.05, 0.25)),
@@ -97,6 +102,7 @@ bonusData = (
     ("merc_maintenance_modifier",   -0.25, (-0.1, -0.25)),
     ("mercenary_cost",              -0.25, (-0.1, -0.5)),
     ("merchants",                   1, (1, 1)),
+    ("merchant_steering_to_inland", 20, (10, 25)),
     ("mil_tech_cost_modifier",      -0.1, (-0.05, -0.2)),
     ("missionaries",                1, (1, 1)),
     ("naval_attrition",             -0.25, (-0.1, -0.25)), # few examples
@@ -114,6 +120,7 @@ bonusData = (
     ("prestige_decay",              -0.02, (-0.01, -0.02)),
     ("prestige_from_land",          1.0, (0.5, 1.0)), # Naval only
     ("prestige_from_naval",         1.0, (0.5, 1.0)), # Offensive only
+    ("privateer_efficiency",        0.2, (0.1, 0.33)),
     ("production_efficiency",       0.1, (0.05, 0.2)),
     ("range",                       0.25, (0.1, 0.33)), # 0.25 or 0.33?
     ("rebel_support_efficiency",    0.25, (0.1, 0.5)),
@@ -126,6 +133,7 @@ bonusData = (
     ("religious_unity",             1/3, (0.2, 0.5)),
     ("republican_tradition",        0.005, (0.001, 0.005)),
     ("sea_repair",                  1.0, (True, True)), # bool
+    ("siege_ability",               0.1, (0.05, 0.2)),
     ("spy_offence",                 0.2, (0.1, 0.25)), # 0.1 to 0.25?
     ("stability_cost_modifier",     -0.1, (-0.05, -0.2)),
     ("technology_cost",             -0.05, (-0.02, -0.1)),
@@ -153,6 +161,17 @@ nonPercentFloats = set([
     "navy_tradition",
     "prestige",
     ])
+
+def isPercentBonus(bonusName):
+    if bonusName in nonPercentFloats: return False
+    if bonusName not in bonusTypes: print(bonusName)
+    idx = bonusTypes.index(bonusName)
+    lowerBound = bonusRanges[idx][0]
+    return isinstance(lowerBound, float)
+
+def isReversed(bonusName):
+    idx = bonusTypes.index(bonusName)
+    return bonusNormalValues[idx] < 0.0
 
 disallowPositiveDuplicates = set([
     "hostile_attrition",
