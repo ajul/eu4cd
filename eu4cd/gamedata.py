@@ -8,7 +8,7 @@ from PyQt4.QtGui import (
     QComboBox,
     )
 
-localizationSources = ["text", "countries", "EU4", "nw2", "powers_and_ideas"]
+localizationSources = ["text", "countries", "EU4", "nw2", "powers_and_ideas", "res_publica"]
 
 tags = []
 tagFiles = []
