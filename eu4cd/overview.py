@@ -4,10 +4,10 @@ import pyradox.yml
 
 import os
 
-from PyQt5.QtCore import (
+from PyQt4.QtCore import (
     pyqtSignal,
     )
-from PyQt5.QtWidgets import (
+from PyQt4.QtGui import (
     QCheckBox,
     QFormLayout,
     QLabel,

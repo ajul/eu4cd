@@ -1,8 +1,4 @@
-from PyQt5.QtCore import (
-    QStringListModel,
-    )
-
-from PyQt5.QtWidgets import (
+from PyQt4.QtGui import (
     QAbstractItemView,
     QColumnView,
     QFormLayout,
@@ -11,6 +7,7 @@ from PyQt5.QtWidgets import (
     QLabel,
     QLineEdit,
     QListView,
+    QStringListModel,
     QWidget,
     )
 

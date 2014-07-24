@@ -1,5 +1,3 @@
-
-
 import os
 
 import webbrowser
@@ -14,7 +12,7 @@ import eu4cd.rating
 import pyradox.struct
 import pyradox.txt
 
-from PyQt5.QtWidgets import (
+from PyQt4.QtGui import (
     QAction,
     QDialog,
     QFileDialog,
@@ -25,7 +23,7 @@ from PyQt5.QtWidgets import (
     QTabWidget,
     )
 
-version = '1.3.1'
+version = '1.4.0'
 
 class MainWindow(QMainWindow):
     """
@@ -164,7 +162,7 @@ class MainWindow(QMainWindow):
         self.handlePenaltiesChanged()
 
     def save(self):
-        filepath, _ = QFileDialog.getSaveFileName(self, "Save mod", self.modPath, "Mod file (*.mod)")
+        filepath = QFileDialog.getSaveFileName(self, "Save mod", self.modPath, "Mod file (*.mod)")
         
         if not filepath: return
 

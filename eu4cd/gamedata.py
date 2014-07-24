@@ -4,7 +4,7 @@ import pyradox.struct
 import pyradox.txt
 import os
 
-from PyQt5.QtWidgets import (
+from PyQt4.QtGui import (
     QComboBox,
     )
 

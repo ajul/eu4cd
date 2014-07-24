@@ -7,14 +7,12 @@ import pyradox.yml
 
 from collections import OrderedDict
 
-from PyQt5.QtCore import (
+from PyQt4.QtCore import (
     pyqtSignal,
     QRegExp,
     )
-from PyQt5.QtGui import (
+from PyQt4.QtGui import (
     QRegExpValidator,
-    )
-from PyQt5.QtWidgets import (
     QComboBox,
     QFormLayout,
     QGroupBox,
