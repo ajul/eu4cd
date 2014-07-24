@@ -126,8 +126,8 @@ class MainWindow(QMainWindow):
         def openParadoxplaza():
             webbrowser.open("http://forum.paradoxplaza.com/forum/showthread.php?741236-Unofficial-Country-Designer")
             
-        def openSourceforge():
-            webbrowser.open("https://sourceforge.net/projects/eu4cd/")
+        def openGithub():
+            webbrowser.open("https://github.com/ajul/eu4cd")
         
         self.menuFile = self.menuBar().addMenu("&File")
         self.menuFile.addAction(QAction("L&oad game data", self, shortcut="Ctrl+O", statusTip="Load game data", triggered=lambda: self.loadConfig(optional=True)))
@@ -137,7 +137,7 @@ class MainWindow(QMainWindow):
 
         self.menuHelp = self.menuBar().addMenu("&Help")
         self.menuHelp.addAction(QAction("&Paradoxplaza forum topic", self, statusTip="Visit the forum topic", triggered=openParadoxplaza))
-        self.menuHelp.addAction(QAction("&Sourceforge project page", self, statusTip="Visit the project page", triggered=openSourceforge))
+        self.menuHelp.addAction(QAction("&Github project page", self, statusTip="Visit the project page", triggered=openGithub))
         self.menuHelp.addSeparator()
         self.menuHelp.addAction(QAction("&About", self, statusTip="View version and license information", triggered=self.about))
 
